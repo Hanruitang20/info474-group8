@@ -47,15 +47,21 @@
           The heatmap shows how emotional difficulty indicators vary across platforms.
         </section>
 
-        <!-- SECTION 4 — Dataset 2 Placeholder -->
-        <section class="step" data-active-index="4">
-          <div class="title">What We See Shapes How We Feel (Content-Level Effects)</div>
-          Beyond platform design, <b>content type</b> plays a major role. Fitness and lifestyle posts often increase comparison.
-          Humor boosts short-term mood. News content tends to increase stress.  
-          <br><br>
-          A visualization based on <i>emotional_well_being.csv</i> will be added here.
-          <br><b>(Placeholder visualization appearing on the right.)</b>
-        </section>
+     <!-- SECTION 4 — Emotion & Engagement -->
+<section class="step" data-active-index="4">
+  <div class="title">What We See Shapes How We Feel (Content-Level Effects)</div>
+  This interactive visualization presents a single Instagram-style card to explore the relationship between user engagement and dominant emotion across social media platforms.
+  <br><br>
+  <b>How to interact:</b>
+  <ul style="margin-left: 20px;">
+    <li>Use the <b>dropdown menu</b> at the top of the card to filter by platform</li>
+    <li>Use the <b>age slider</b> to filter users up to a certain age</li>
+    <li>Watch how the emoji, colors, and engagement metrics update in real-time</li>
+  </ul>
+  <br>
+  <br>
+  This design lets you quickly see how different platforms and age groups correlate with distinct emotional states and engagement patterns—without being overwhelmed by individual user data.
+</section>
 
         <!-- SECTION 5 — Personal Insight -->
         <section class="step" data-active-index="5">
@@ -100,20 +106,8 @@
   <script src="js/sketches/viz/viz_platform.js"></script>
   <script src="js/sketches/viz/viz_heatmap_mental_health.js"></script>
 
-  <!-- placeholder viz for emotional_well_being.csv -->
-  <script>
-    window.VizPlaceholder = {
-      draw(p, manager) {
-        if (manager.activeIndex !== 4) return;
-        p.resizeCanvas(800, 600);
-        p.clear();
-        p.fill(0);
-        p.textAlign(p.CENTER, p.CENTER);
-        p.textSize(24);
-        p.text("Placeholder for Emotional Well-Being Visualization", p.width / 2, p.height / 2);
-      }
-    };
-  </script>
+<script src="js/sketches/viz/viz_emotions.js"></script>
+
 
   <!-- renderer -->
   <script src="js/sketches/sketch_renderer.js"></script>

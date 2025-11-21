@@ -142,7 +142,7 @@
             // Center heatmap horizontally
             const heatmapWidth = INDICATORS.length * CELL + (INDICATORS.length - 1) * GAP;
             const LEFT = (CANVAS_W - heatmapWidth) / 2;
-            
+
             // Vertical positioning
             const TOP = CANVAS_H * 0.20;
 

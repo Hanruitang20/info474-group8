@@ -33,7 +33,7 @@ window.VizPlatform = {
     this.globalRanges = this.computeGlobalRanges();
 
     // remove unused platforms
-    const unused = new Set(["LINE", "KakaoTalk", "LinkedIn", "WeChat", "Youtube", "Snapchat",  "WhatsApp", "VKontakte"]);
+    const unused = new Set(["LINE", "KakaoTalk", "LinkedIn", "WeChat", "Youtube", "Snapchat", "WhatsApp", "VKontakte"]);
     Object.keys(this.platformColors).forEach(pf => {
       if (unused.has(pf)) delete this.platformColors[pf];
     });
@@ -100,10 +100,10 @@ window.VizPlatform = {
 
   computeTopCountries() {
     const topCountries = {};
-    
+
     for (const gender in this.grouped) {
       const countryCounts = {};
-      
+
       // Count total records per country for this gender
       for (const country in this.grouped[gender]) {
         let totalCount = 0;
@@ -112,16 +112,16 @@ window.VizPlatform = {
         }
         countryCounts[country] = totalCount;
       }
-      
+
       // Get top 10 countries by count
       const sorted = Object.entries(countryCounts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 10)
         .map(([country]) => country);
-      
+
       topCountries[gender] = new Set(sorted);
     }
-    
+
     return topCountries;
   },
 
@@ -233,17 +233,17 @@ window.VizPlatform = {
 
       const isSelected = this.selectedPlatform === pf;
       const btnColor = isSelected ? "#4C6EF5" : "#E5E7EB";
-      
+
       // Light shadow on hover (detect mouse proximity)
-      const mouseDist = p.dist(p.mouseX, p.mouseY, x + bw/2, y + bh/2);
+      const mouseDist = p.dist(p.mouseX, p.mouseY, x + bw / 2, y + bh / 2);
       const isHovering = mouseDist < 50 && !isSelected;
-      
+
       if (isHovering) {
         p.fill(0, 8);
         p.noStroke();
         p.rect(x + 1, y + 2, bw, bh, 6);
       }
-      
+
       p.fill(btnColor);
       p.noStroke();
       p.rect(x, y, bw, bh, 6);
@@ -273,7 +273,7 @@ window.VizPlatform = {
     const chartWidth = 500; // Reduced from 650
     const chartMarginLeft = 350; // Center: (1200 - 500) / 2
     const legendX = chartMarginLeft + chartWidth + 60; // Position legend closer to plot
-    
+
     const legendY = offset;
     const legendRows = Math.ceil(entries.length / cols);
 
@@ -314,7 +314,7 @@ window.VizPlatform = {
 
       for (const c in this.grouped[gender] || {}) {
         if (!topSet.has(c)) continue;
-        
+
         const d = this.grouped[gender][c][selected];
         if (d && !isNaN(d.avgUsage) && !isNaN(d.avgMH)) {
           pts.push({ country: c, usage: d.avgUsage, mh: d.avgMH });
@@ -337,14 +337,14 @@ window.VizPlatform = {
       // Subtle gridlines
       p.stroke(221); // #DDDDDD
       p.strokeWeight(1);
-      
+
       // Vertical gridlines
       for (let i = 0; i <= 5; i++) {
         const v = minUsage + ((maxUsage - minUsage) * i) / 5;
         const x = p.map(v, minUsage, maxUsage, margin.left, margin.left + W);
         p.line(x, margin.top, x, margin.top + H);
       }
-      
+
       // Horizontal gridlines
       for (let i = 0; i <= 5; i++) {
         const v = minMH + ((maxMH - minMH) * i) / 5;
@@ -398,7 +398,7 @@ window.VizPlatform = {
         const clampedY = p.constrain(y, margin.top + 6, margin.top + H - 6);
 
         const col = this.countryColors[pt.country];
-        
+
         // Draw point with subtle outline for better visibility
         p.stroke(255, 200);
         p.strokeWeight(1.5);
@@ -476,7 +476,7 @@ window.VizPlatform = {
       const ty = by + padding + 12;
 
       p.noStroke();
-      
+
       // Country name (bold, larger)
       p.fill(34); // #222
       p.textSize(14.5);

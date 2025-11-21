@@ -9,7 +9,8 @@
     },
 
     draw: function (p, manager, ai, progress) {
-      console.log("Renderer draw ai =", ai);
+      // `ai` = activeIndex from scroller
+      // console.log("Renderer draw ai =", ai);
 
       // SECTION 2 — Platform Viz
       if (ai === 2 && window.VizPlatform) {
@@ -19,13 +20,13 @@
 
       // SECTION 3 — Heatmap
       if (ai === 3 && window.VizHeatmapMentalHealth) {
-        window.VizHeatmapMentalHealth.draw(p, manager);
+        window.VizHeatmapMentalHealth.draw(p, manager, ai, progress);
         return;
       }
 
-      // SECTION 4 — Placeholder
-      if (ai === 4 && window.VizPlaceholder) {
-        window.VizPlaceholder.draw(p, manager);
+      // SECTION 4 — Emotions
+      if (ai === 4 && window.VizEmotions) {
+        window.VizEmotions.draw(p, manager, ai, progress); // pass activeIndex
         return;
       }
 
@@ -36,12 +37,12 @@
       }
 
       // SECTION 5–6 — basic examples
-      if (ai >= 5 && ai < 7) {
+      if (ai >= 5 && ai < 7 && window.VizScatter) {
         window.VizScatter.draw(p, manager, ai, progress);
         return;
       }
 
-      // fallback
+      // fallback: clear canvas
       p.clear();
     }
   };
