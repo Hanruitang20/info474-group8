@@ -2,7 +2,8 @@
 <html>
 
 <head>
-  <title>Scrolling Sections</title>
+  <meta charset="UTF-8" />
+  <title>How Social Media Shapes the Emotional World of Young Adults</title>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
 </head>
@@ -10,80 +11,112 @@
 <body>
   <div class="container">
     <div id='graphic'>
+      <div id="platform-buttons" style="margin: 20px 40px;"></div>
+
       <div id='sections'>
+
+        <!-- SECTION 0 — Title -->
         <section class="step" data-active-index="0">
-          <div class="title">INFO 474 Final Project</div>
-          Here is a template to work on your final project.<br /><br />
-          Your mission is to create an <b>interactive article using P5.js</b>.
+          <div class="title">How Social Media Shapes the Emotional World of Young Adults</div>
+          Social media is where many young adults learn, express themselves, and stay connected—but it’s also a place where comparison,
+          pressure, and emotional fatigue quietly build. This interactive article explores how <b>usage habits</b>,
+          <b>platform environments</b>, and <b>content types</b> influence emotional well-being.
         </section>
+
+        <!-- SECTION 1 — Introduction -->
         <section class="step" data-active-index="1">
-          <div class="title">Sections</div>
-          Note that each section in index.html corresponds to a section in the
-          scrolling article. You can add or remove sections as needed.
+          <div class="title">A Space We All Live In</div>
+          Instead of asking whether social media is “good” or “bad,” we examine a more useful question:
+          <b>How do different platforms, habits, and content categories shape how we feel?</b>
+          Using three datasets, we move from broad usage patterns → platform-level emotional climates → deeper content-level influences.
         </section>
+
+        <!-- SECTION 2 — Dataset 1: Usage + Addiction (Platform Viz) -->
         <section class="step" data-active-index="2">
-          <div class="title">No visualization</div>
-          You don't need to have a visualization for every section. Some sections may simply be text.
+          <div class="title">How Much Time Do We Spend Online?</div>
+          Many young adults spend 3–6 hours a day online. Higher usage often correlates with compulsive checking,
+          difficulty disconnecting, and lower emotional balance. Explore how different countries, genders, and platform choices relate to
+          mental well-being through the visualization on the right.
         </section>
+
+        <!-- SECTION 3 — Dataset 3: Platform Emotional Climate (Heatmap) -->
         <section class="step" data-active-index="3">
-          <div class="title">Narrative</div>
-          These sections will tell a story. You can use them to explain the visualization, provide context,
-          or share insights.
+          <div class="title">Different Platforms, Different Emotional Worlds</div>
+          Not all platforms feel the same. Visual platforms like Instagram and TikTok tend to increase comparison and worry.
+          Discussion platforms like Reddit or X can provide connection—or emotional fatigue. Long-form platforms like YouTube depend heavily on content type.
+          The heatmap shows how emotional difficulty indicators vary across platforms.
         </section>
+
+        <!-- SECTION 4 — Dataset 2 Placeholder -->
         <section class="step" data-active-index="4">
-          <div class="title">Be creative</div>
-          Surprise your readers with interesting interactions, animations, or data visualizations.
+          <div class="title">What We See Shapes How We Feel (Content-Level Effects)</div>
+          Beyond platform design, <b>content type</b> plays a major role. Fitness and lifestyle posts often increase comparison.
+          Humor boosts short-term mood. News content tends to increase stress.  
+          <br><br>
+          A visualization based on <i>emotional_well_being.csv</i> will be added here.
+          <br><b>(Placeholder visualization appearing on the right.)</b>
         </section>
+
+        <!-- SECTION 5 — Personal Insight -->
         <section class="step" data-active-index="5">
-          <div class="title">Same visualization multiple sections</div>
-          Some visualizations may be relevant to multiple sections. You can reuse the same visualization
-          across different sections to reinforce key points. Or build on the previous visualization to just add on.
+          <div class="title">When Patterns Become Personal</div>
+          Small choices—such as reducing passive scrolling or following more diverse creators—can shift emotional well-being.
+          As you explore the visualizations, consider your own habits: <b>Which platforms shape your emotions the most?</b>
         </section>
-        <div id="extra-space">
-        </div>
+
+        <!-- SECTION 6 — Closing -->
         <section class="step" data-active-index="6">
-          <div class="title">Examples</div>
-          There is two examples in this code. One is a grid of circles that changes color
-          based on the section index. The other is a scatter plot and bar chart that
-          shows random data points. You can modify or replace these examples with your own visualizations.
-          Make sure you read both source files to understand how they work.
+          <div class="title">A More Aware Way Forward</div>
+          Social media is not inherently harmful or beneficial. Its effects depend on platform culture, content, and how we choose to engage.
+          We hope this article helps you reflect on your digital habits and find a healthier, more intentional online experience.
         </section>
-        <section class="step" data-active-index="7">
-          <div class="title">Best of Luck in the Project!</div>
-          You are now ready to start building your interactive article. Good luck!
-        </section>
+
       </div>
-      <div id='vis' class='vis-hidden'>
-      </div>
-      <div id="extra-space">
-      </div>
+
+      <div id='vis' class='vis-hidden'></div>
+      <div id="extra-space"></div>
     </div>
   </div>
 
-
-  <!-- p5.js (using CDN) -->
+  <!-- p5 -->
   <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.min.js"></script>
-  <!-- helpers (data/loading, scroller, visual controller) -->
+
+  <!-- helpers -->
   <script src="js/helpers/data_loader.js"></script>
   <script src="js/helpers/scroller.js"></script>
   <script src="js/helpers/visual_controller.js"></script>
-
-  <!-- orchestrator (wires scroller -> sketch) -->
   <script src="js/helpers/sections.js"></script>
 
-  <!-- sketches (manager) -->
+  <!-- sketch manager -->
   <script src="js/sketches/sketch_manager.js"></script>
 
-  <!-- sketches (example renderer) -->
+  <!-- example -->
   <script src="js/sketches/examples/sketch_grid.js"></script>
 
-  <!-- sketches (renderers): UPDATE HERE FOR PROJECT -->
+  <!-- visualizations -->
   <script src="js/sketches/viz/viz_title.js"></script>
   <script src="js/sketches/viz/viz_scatter.js"></script>
   <script src="js/sketches/viz/viz_bar.js"></script>
+  <script src="js/sketches/viz/viz_platform.js"></script>
+  <script src="js/sketches/viz/viz_heatmap_mental_health.js"></script>
+
+  <!-- placeholder viz for emotional_well_being.csv -->
+  <script>
+    window.VizPlaceholder = {
+      draw(p, manager) {
+        if (manager.activeIndex !== 4) return;
+        p.resizeCanvas(800, 600);
+        p.clear();
+        p.fill(0);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.textSize(24);
+        p.text("Placeholder for Emotional Well-Being Visualization", p.width / 2, p.height / 2);
+      }
+    };
+  </script>
+
+  <!-- renderer -->
   <script src="js/sketches/sketch_renderer.js"></script>
 
-
 </body>
-
 </html>

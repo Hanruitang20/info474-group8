@@ -1,40 +1,48 @@
-// sketch_renderer.js
-
-// Responsible for rendering the main visualization based on the current active index
 (function () {
-    window.Renderer = {
+  window.Renderer = {
 
-        setData: function (manager) {
-            var self = this;
+    setData: function (manager) {
+      manager.offsetX = (manager.margin && manager.margin.left) || 20;
+      manager.offsetY = (manager.margin && manager.margin.top) || 0;
+      manager.data = [];
+      return Promise.resolve(manager.data);
+    },
 
-            manager.offsetX = (manager.margin && manager.margin.left) || 20;
-            manager.offsetY = (manager.margin && manager.margin.top) || 0;
+    draw: function (p, manager, ai, progress) {
+      console.log("Renderer draw ai =", ai);
 
-            function computeLayout(data) {
-                manager.data = data;
-            }
+      // SECTION 2 — Platform Viz
+      if (ai === 2 && window.VizPlatform) {
+        window.VizPlatform.draw(p, manager, ai, progress);
+        return;
+      }
 
-            computeLayout([]);
-            return Promise.resolve(manager.data);
-        },
+      // SECTION 3 — Heatmap
+      if (ai === 3 && window.VizHeatmapMentalHealth) {
+        window.VizHeatmapMentalHealth.draw(p, manager);
+        return;
+      }
 
-        draw: function (p, manager, ai, progress) {
-            try { console.log('Renderer: delegating draw, ai=', ai); } catch (e) { }
+      // SECTION 4 — Placeholder
+      if (ai === 4 && window.VizPlaceholder) {
+        window.VizPlaceholder.draw(p, manager);
+        return;
+      }
 
-            if (ai === 0 || ai === 1) {
-                window.VizTitle.draw(p, manager, ai, progress);
-                return;
-            }
+      // SECTION 0–1 — Title
+      if (ai === 0 || ai === 1) {
+        window.VizTitle.draw(p, manager, ai, progress);
+        return;
+      }
 
-            if (ai >= 4 && ai < 7) {
-                window.VizScatter.draw(p, manager, ai, progress);
-                return;
-            }
+      // SECTION 5–6 — basic examples
+      if (ai >= 5 && ai < 7) {
+        window.VizScatter.draw(p, manager, ai, progress);
+        return;
+      }
 
-            if (ai === 7) {
-                window.VizBar.draw(p, manager, ai, progress);
-                return;
-            }
-        }
-    };
+      // fallback
+      p.clear();
+    }
+  };
 })();

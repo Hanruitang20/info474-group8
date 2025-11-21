@@ -1,13 +1,14 @@
-
+/* 整页容器宽度 */
 .container {
   width: 890px;
 }
 
+/* 顶部给可视化留空间 */
 #graphic {
   padding-top: 60px;
 }
 
-
+/* 左侧滚动文字区域 */
 #sections {
   position: relative;
   display: inline-block;
@@ -19,37 +20,37 @@
 
 .step {
   margin-bottom: 200px;
-  font-family: "TiemposTextWeb-Regular","Georgia";
-  font-size: 16px;
-  line-height: 23px;
-  color: #767678;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: #444444;
 }
 
 #sections .title {
-  font-family: Arial,Helvetica,"san-serif";
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 2px;
-  color: #262626;
-  line-height: 1.2em;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #222222;
+  line-height: 1.4em;
+  letter-spacing: -0.01em;
 }
 
 #extra-space {
   height: 300px;
 }
 
+/* 右侧可视化区域（保持模板默认） */
 #vis {
   display: inline-block;
   position: fixed;
   top: 60px;
   z-index: 100;
   margin-left: 0;
-  /* height: 600px; */
-  /* width: 600px; */
-  /* background-color: #ddd; */
+  background: #ffffff; /* Clean white background */
 }
 
-/* visibility helpers for popup effect controlled by VisualController */
+/* 由 VisualController 控制显隐的 class */
 .vis-hidden {
   opacity: 0;
   pointer-events: none;
@@ -88,7 +89,11 @@
 .cough-arrow {
   stroke: #000;
   stroke-width: 4px;
-
 }
 
-
+/* 让整个页面在需要时可以水平滚动（防止被裁剪） */
+body {
+  overflow-x: auto;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  background-color: #FAFAFA; /* Subtle off-white background */
+}

@@ -1,0 +1,707 @@
+{
+  "Afghanistan": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Albania": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Andorra": {
+    "High School": {
+      "TikTok": 1
+    }
+  },
+  "Argentina": {
+    "High School": {
+      "TikTok": 1
+    }
+  },
+  "Armenia": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Australia": {
+    "Undergraduate": {
+      "Facebook": 6,
+      "Instagram": 8
+    }
+  },
+  "Austria": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Azerbaijan": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Bahamas": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Bahrain": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Bangladesh": {
+    "Graduate": {
+      "Facebook": 4
+    },
+    "Undergraduate": {
+      "Instagram": 12,
+      "TikTok": 4
+    }
+  },
+  "Belarus": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Belgium": {
+    "High School": {
+      "TikTok": 1
+    }
+  },
+  "Bhutan": {
+    "High School": {
+      "Snapchat": 1
+    }
+  },
+  "Bolivia": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Bosnia": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Brazil": {
+    "Undergraduate": {
+      "Instagram": 1,
+      "Snapchat": 1,
+      "TikTok": 2,
+      "WhatsApp": 4
+    }
+  },
+  "Bulgaria": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Canada": {
+    "Graduate": {
+      "Facebook": 1,
+      "Instagram": 14,
+      "TikTok": 16
+    },
+    "Undergraduate": {
+      "Instagram": 3
+    }
+  },
+  "Chile": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "China": {
+    "Graduate": {
+      "WeChat": 12
+    },
+    "Undergraduate": {
+      "TikTok": 1,
+      "WeChat": 3
+    }
+  },
+  "Colombia": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Costa Rica": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Croatia": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Cyprus": {
+    "Undergraduate": {
+      "Facebook": 1
+    }
+  },
+  "Czech Republic": {
+    "High School": {
+      "Snapchat": 1
+    }
+  },
+  "Denmark": {
+    "Graduate": {
+      "Facebook": 18,
+      "Twitter": 3
+    },
+    "Undergraduate": {
+      "Facebook": 1,
+      "Instagram": 2,
+      "Twitter": 3
+    }
+  },
+  "Ecuador": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Egypt": {
+    "Undergraduate": {
+      "YouTube": 1
+    }
+  },
+  "Estonia": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Finland": {
+    "Graduate": {
+      "Instagram": 2
+    },
+    "Undergraduate": {
+      "Facebook": 1,
+      "Instagram": 4,
+      "TikTok": 1
+    }
+  },
+  "France": {
+    "Graduate": {
+      "Facebook": 2,
+      "Twitter": 1
+    },
+    "Undergraduate": {
+      "Instagram": 22,
+      "Snapchat": 1,
+      "Twitter": 1
+    }
+  },
+  "Georgia": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Germany": {
+    "Graduate": {
+      "Facebook": 7,
+      "Instagram": 6,
+      "LinkedIn": 1
+    }
+  },
+  "Ghana": {
+    "Undergraduate": {
+      "Snapchat": 1
+    }
+  },
+  "Greece": {
+    "Graduate": {
+      "Facebook": 1
+    }
+  },
+  "Hong Kong": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Hungary": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Iceland": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "India": {
+    "Graduate": {
+      "Facebook": 12,
+      "Instagram": 4,
+      "TikTok": 1,
+      "Twitter": 1,
+      "WhatsApp": 18
+    },
+    "Undergraduate": {
+      "Facebook": 1,
+      "Instagram": 5,
+      "TikTok": 4,
+      "WhatsApp": 7
+    }
+  },
+  "Indonesia": {
+    "High School": {
+      "TikTok": 1
+    }
+  },
+  "Iraq": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Ireland": {
+    "Graduate": {
+      "Instagram": 3,
+      "Twitter": 2
+    },
+    "High School": {
+      "Instagram": 1
+    },
+    "Undergraduate": {
+      "Instagram": 12,
+      "TikTok": 9
+    }
+  },
+  "Israel": {
+    "Graduate": {
+      "Facebook": 1
+    }
+  },
+  "Italy": {
+    "Graduate": {
+      "Facebook": 3,
+      "Instagram": 6,
+      "LinkedIn": 1,
+      "TikTok": 6,
+      "Twitter": 2
+    },
+    "Undergraduate": {
+      "Facebook": 1,
+      "TikTok": 2
+    }
+  },
+  "Jamaica": {
+    "Undergraduate": {
+      "Snapchat": 1
+    }
+  },
+  "Japan": {
+    "Graduate": {
+      "Twitter": 3
+    },
+    "High School": {
+      "TikTok": 1
+    },
+    "Undergraduate": {
+      "LINE": 12,
+      "Twitter": 5
+    }
+  },
+  "Jordan": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Kazakhstan": {
+    "Undergraduate": {
+      "Snapchat": 1
+    }
+  },
+  "Kenya": {
+    "Undergraduate": {
+      "Facebook": 1
+    }
+  },
+  "Kosovo": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Kuwait": {
+    "High School": {
+      "Snapchat": 1
+    }
+  },
+  "Kyrgyzstan": {
+    "Graduate": {
+      "Facebook": 1
+    }
+  },
+  "Latvia": {
+    "High School": {
+      "Snapchat": 1
+    }
+  },
+  "Lebanon": {
+    "High School": {
+      "YouTube": 1
+    }
+  },
+  "Liechtenstein": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Lithuania": {
+    "Graduate": {
+      "Facebook": 1
+    }
+  },
+  "Luxembourg": {
+    "High School": {
+      "Snapchat": 1
+    }
+  },
+  "Malaysia": {
+    "Graduate": {
+      "LinkedIn": 1,
+      "WhatsApp": 7
+    }
+  },
+  "Maldives": {
+    "Graduate": {
+      "Instagram": 4,
+      "TikTok": 10
+    },
+    "Undergraduate": {
+      "Instagram": 5
+    }
+  },
+  "Malta": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Mexico": {
+    "Graduate": {
+      "Facebook": 4,
+      "WhatsApp": 18
+    },
+    "High School": {
+      "Instagram": 1
+    },
+    "Undergraduate": {
+      "Facebook": 2,
+      "TikTok": 2
+    }
+  },
+  "Moldova": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Monaco": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Montenegro": {
+    "Graduate": {
+      "Facebook": 1
+    }
+  },
+  "Morocco": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Nepal": {
+    "Graduate": {
+      "Facebook": 2,
+      "TikTok": 1
+    },
+    "Undergraduate": {
+      "Facebook": 2,
+      "TikTok": 13,
+      "YouTube": 1
+    }
+  },
+  "Netherlands": {
+    "Undergraduate": {
+      "Instagram": 6,
+      "Snapchat": 1,
+      "TikTok": 1
+    }
+  },
+  "New Zealand": {
+    "Graduate": {
+      "Facebook": 3,
+      "Instagram": 4
+    },
+    "Undergraduate": {
+      "YouTube": 1
+    }
+  },
+  "Nigeria": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "North Macedonia": {
+    "Undergraduate": {
+      "Snapchat": 1
+    }
+  },
+  "Norway": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Oman": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Pakistan": {
+    "Graduate": {
+      "Instagram": 14
+    },
+    "Undergraduate": {
+      "Instagram": 4,
+      "TikTok": 1
+    }
+  },
+  "Panama": {
+    "Undergraduate": {
+      "Facebook": 1
+    }
+  },
+  "Paraguay": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Peru": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Philippines": {
+    "Undergraduate": {
+      "Snapchat": 1
+    }
+  },
+  "Poland": {
+    "Graduate": {
+      "Facebook": 9,
+      "Instagram": 1,
+      "TikTok": 3
+    },
+    "Undergraduate": {
+      "Facebook": 2,
+      "TikTok": 1
+    }
+  },
+  "Portugal": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Qatar": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Romania": {
+    "Undergraduate": {
+      "Instagram": 1
+    }
+  },
+  "Russia": {
+    "Graduate": {
+      "Instagram": 3,
+      "VKontakte": 12
+    },
+    "Undergraduate": {
+      "Instagram": 5,
+      "YouTube": 1
+    }
+  },
+  "San Marino": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Serbia": {
+    "Undergraduate": {
+      "YouTube": 1
+    }
+  },
+  "Singapore": {
+    "Undergraduate": {
+      "TikTok": 8
+    }
+  },
+  "Slovakia": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Slovenia": {
+    "High School": {
+      "TikTok": 1
+    }
+  },
+  "South Africa": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "South Korea": {
+    "Graduate": {
+      "Instagram": 1
+    },
+    "Undergraduate": {
+      "KakaoTalk": 12
+    }
+  },
+  "Spain": {
+    "Graduate": {
+      "Facebook": 3,
+      "TikTok": 2
+    },
+    "Undergraduate": {
+      "Facebook": 1,
+      "Instagram": 10,
+      "TikTok": 11
+    }
+  },
+  "Sri Lanka": {
+    "Graduate": {
+      "Facebook": 3,
+      "LinkedIn": 1
+    },
+    "Undergraduate": {
+      "Facebook": 11,
+      "TikTok": 4
+    }
+  },
+  "Sweden": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Switzerland": {
+    "Graduate": {
+      "Facebook": 4,
+      "Instagram": 1,
+      "LinkedIn": 1
+    },
+    "Undergraduate": {
+      "Facebook": 1,
+      "Instagram": 19,
+      "TikTok": 1
+    }
+  },
+  "Syria": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Taiwan": {
+    "Graduate": {
+      "LinkedIn": 1
+    }
+  },
+  "Tajikistan": {
+    "Undergraduate": {
+      "YouTube": 1
+    }
+  },
+  "Thailand": {
+    "High School": {
+      "Instagram": 1
+    }
+  },
+  "Trinidad": {
+    "High School": {
+      "TikTok": 1
+    }
+  },
+  "Turkey": {
+    "Graduate": {
+      "Instagram": 11,
+      "TikTok": 10
+    },
+    "Undergraduate": {
+      "Instagram": 3,
+      "TikTok": 3
+    }
+  },
+  "UAE": {
+    "High School": {
+      "Instagram": 1
+    },
+    "Undergraduate": {
+      "Instagram": 7
+    }
+  },
+  "UK": {
+    "Graduate": {
+      "Facebook": 6,
+      "Instagram": 6,
+      "TikTok": 2,
+      "Twitter": 2
+    },
+    "High School": {
+      "YouTube": 1
+    },
+    "Undergraduate": {
+      "Facebook": 2,
+      "TikTok": 1,
+      "Twitter": 2
+    }
+  },
+  "USA": {
+    "Graduate": {
+      "Instagram": 2,
+      "Twitter": 3
+    },
+    "Undergraduate": {
+      "Instagram": 17,
+      "TikTok": 16,
+      "Twitter": 2
+    }
+  },
+  "Ukraine": {
+    "Undergraduate": {
+      "TikTok": 1
+    }
+  },
+  "Uruguay": {
+    "Undergraduate": {
+      "YouTube": 1
+    }
+  },
+  "Uzbekistan": {
+    "High School": {
+      "TikTok": 1
+    }
+  },
+  "Vatican City": {
+    "Undergraduate": {
+      "YouTube": 1
+    }
+  },
+  "Venezuela": {
+    "Graduate": {
+      "Facebook": 1
+    }
+  },
+  "Vietnam": {
+    "Undergraduate": {
+      "Facebook": 1
+    }
+  },
+  "Yemen": {
+    "Undergraduate": {
+      "Facebook": 1
+    }
+  }
+}
