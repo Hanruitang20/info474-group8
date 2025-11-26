@@ -18,22 +18,22 @@
         return;
       }
 
-      // SECTION 3 — Heatmap
-      if (ai === 3 && window.VizHeatmapMentalHealth) {
+      // SECTION 5 — Heatmap
+      if (ai === 5 && window.VizHeatmapMentalHealth) {
         window.VizHeatmapMentalHealth.draw(p, manager, ai, progress);
         return;
       }
 
-      // SECTION 4 — Emotions
-      if (ai === 4 && window.VizEmotions) {
+      // SECTION 6 — Emotions
+      if (ai === 6 && window.VizEmotions) {
         window.VizEmotions.draw(p, manager, ai, progress); // pass activeIndex
         return;
       }
 
       // SECTION 0–1 — Title (removed)
 
-      // SECTION 5–6 — basic examples
-      if (ai >= 5 && ai < 7 && window.VizScatter) {
+      // SECTION 7–8 — basic examples
+      if (ai >= 7 && ai < 9 && window.VizScatter) {
         window.VizScatter.draw(p, manager, ai, progress);
         return;
       }
