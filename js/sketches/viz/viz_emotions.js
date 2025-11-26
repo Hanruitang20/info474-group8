@@ -69,8 +69,8 @@ window.VizEmotions = (function () {
     function draw(p, manager, activeIndex) {
         loadData(p);
 
-        // --- ONLY SHOW IN SECTION 4 ---
-        if (activeIndex !== 4) {
+        // --- ONLY SHOW IN SECTION 6 ---
+        if (activeIndex !== 6) {
             p.clear();
             // Hide controls when not in section 4
             if (dropdown) {

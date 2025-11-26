@@ -112,14 +112,14 @@ window.VizPhoneBoxplot = {
         const stats = this.stats;
       
         // More compact layout
-        const margin = { top: 70, right: 140, bottom: 55, left: 80 };
+        const margin = { top: 60, right: 120, bottom: 50, left: 60 };
       
         // *** SHRINK THE VERTICAL AREA ***
-        const plotTop = margin.top + 70;              // push plot downward
-        const plotBottom = p.height - margin.bottom - 120; // pull plot upward
+        const plotTop = margin.top + 50;
+        const plotBottom = p.height - margin.bottom - 85;
       
         const layoutCenter = p.width / 2;
-        const axisX = layoutCenter - 100;
+        const axisX = layoutCenter - 140;
         const boxCenterX = layoutCenter + 40;
       
         // Score range
@@ -171,7 +171,7 @@ window.VizPhoneBoxplot = {
         }
       
         // ----------------- BOX PLOT -----------------
-        const boxWidth = 85;
+        const boxWidth = Math.min(150, Math.max(110, p.width * 0.2));
         const boxX1 = boxCenterX - boxWidth / 2;
         const boxX2 = boxCenterX + boxWidth / 2;
       
@@ -187,8 +187,9 @@ window.VizPhoneBoxplot = {
         p.line(boxCenterX, q3Y, boxCenterX, maxY);
         p.line(boxCenterX, q1Y, boxCenterX, minY);
       
-        p.line(boxCenterX - 30, maxY, boxCenterX + 30, maxY);
-        p.line(boxCenterX - 30, minY, boxCenterX + 30, minY);
+        const whiskerHalf = Math.min(46, boxWidth * 0.35);
+        p.line(boxCenterX - whiskerHalf, maxY, boxCenterX + whiskerHalf, maxY);
+        p.line(boxCenterX - whiskerHalf, minY, boxCenterX + whiskerHalf, minY);
       
         // Box
         p.noStroke();
@@ -208,8 +209,8 @@ window.VizPhoneBoxplot = {
       
         // ----------------- STATS CALLOUT -----------------
         const statX = p.width - margin.right + 10;
-        const statYStart = margin.top + 20;
-        const statSpacing = 20;
+        const statYStart = margin.top + 40;
+        const statSpacing = 22;
       
         const statLines = [
           { label: "Max", value: stats.max },
@@ -238,9 +239,9 @@ window.VizPhoneBoxplot = {
         p.fill("#4b5670");
         p.textAlign(p.LEFT, p.TOP);
         p.textSize(13);
-      
+
         const annotationWidth = p.width - margin.left - margin.right;
-         p.text(annotation, margin.left, plotBottom + 30, annotationWidth, 60);
+        p.text(annotation, margin.left, plotBottom + 50, annotationWidth, 60);
       }      
   };
   
