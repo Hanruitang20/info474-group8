@@ -12,9 +12,9 @@
       // `ai` = activeIndex from scroller
       // console.log("Renderer draw ai =", ai);
 
-      // SECTION 2 — Platform Viz
-      if (ai === 2 && window.VizPlatform) {
-        window.VizPlatform.draw(p, manager, ai, progress);
+      // SECTION 2 — Phone Addiction Boxplot
+      if (ai === 2 && window.VizPhoneBoxplot) {
+        window.VizPhoneBoxplot.draw(p, manager, ai, progress);
         return;
       }
 
@@ -30,11 +30,7 @@
         return;
       }
 
-      // SECTION 0–1 — Title
-      if (ai === 0 || ai === 1) {
-        window.VizTitle.draw(p, manager, ai, progress);
-        return;
-      }
+      // SECTION 0–1 — Title (removed)
 
       // SECTION 5–6 — basic examples
       if (ai >= 5 && ai < 7 && window.VizScatter) {

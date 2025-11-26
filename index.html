@@ -17,10 +17,8 @@
 
         <!-- SECTION 0 — Title -->
         <section class="step" data-active-index="0">
-          <div class="title">How Social Media Shapes the Emotional World of Young Adults</div>
-          Social media is where many young adults learn, express themselves, and stay connected—but it’s also a place where comparison,
-          pressure, and emotional fatigue quietly build. This interactive article explores how <b>usage habits</b>,
-          <b>platform environments</b>, and <b>content types</b> influence emotional well-being.
+          <div class="title">Scrolling Through Our Minds: How Social Media Shapes the Emotional World of Young Adults</div>
+          Social media has become deeply embedded in the everyday lives of young adults. It fills transitional moments between classes, shapes how friendships are maintained, and influences how young people develop a sense of self. Yet despite its overwhelming presence, the emotional impact of social media is far from straightforward. This interactive article explores how social media shapes the emotional world of young adults by examining multiple layers of influence — from usage intensity to platform environments to usage quality to demographic differences. Together, these layers reveal a richer and more nuanced story about how digital habits affect emotional well-being.
         </section>
 
         <!-- SECTION 1 — Introduction -->
@@ -31,12 +29,21 @@
           Using three datasets, we move from broad usage patterns → platform-level emotional climates → deeper content-level influences.
         </section>
 
-        <!-- SECTION 2 — Dataset 1: Usage + Addiction (Platform Viz) -->
+        <!-- SECTION 2 — Dataset 1: Usage + Addiction (Boxplot) -->
         <section class="step" data-active-index="2">
-          <div class="title">How Much Time Do We Spend Online?</div>
-          Many young adults spend 3–6 hours a day online. Higher usage often correlates with compulsive checking,
-          difficulty disconnecting, and lower emotional balance. Explore how different countries, genders, and platform choices relate to
-          mental well-being through the visualization on the right.
+          <div class="title">How Much Time Do Young People Spend Online?</div>
+          <p>
+            Smartphone use is the foundation of young people’s digital lives, and many begin their online experiences already highly attached to their devices. The boxplot illustrates this baseline by showing the distribution of total phone addiction scores among teens.
+          </p>
+          <p class="callout">
+            <b>What jumps out?</b> Most teens cluster near the top of the scale (Q1 ≈ 8, median ≈ 9, Q3 ≈ 10). Only a small group scores low, so the lower whisker stretches downward while the upper whisker barely moves.
+          </p>
+          <p>
+            High engagement—and in many cases high dependence—is the norm rather than the exception. Teens frequently feel compelled to check their phones, struggle to disconnect, or experience discomfort when offline. These behaviors form the backdrop against which social media interactions take place.
+          </p>
+          <p>
+            Understanding this level of phone dependence matters for the rest of the story. If device attachment is already elevated, emotional reactions to online content can become more intense, more frequent, and harder to regulate. The following sections explore how specific platforms and content amplify—or soften—those responses.
+          </p>
         </section>
 
         <!-- SECTION 3 — Dataset 3: Platform Emotional Climate (Heatmap) -->
@@ -104,6 +111,7 @@
   <script src="js/sketches/viz/viz_scatter.js"></script>
   <script src="js/sketches/viz/viz_bar.js"></script>
   <script src="js/sketches/viz/viz_platform.js"></script>
+  <script src="js/sketches/viz/viz_phone_boxplot.js"></script>
   <script src="js/sketches/viz/viz_heatmap_mental_health.js"></script>
 
 <script src="js/sketches/viz/viz_emotions.js"></script>

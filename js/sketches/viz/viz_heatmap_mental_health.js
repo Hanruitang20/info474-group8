@@ -71,8 +71,12 @@
     window.VizHeatmapMentalHealth = {
         draw: function (p, manager) {
 
+            const canvasW = (manager && manager.canvasWidth) || (manager && manager.width) || p.width;
+            const canvasH = (manager && manager.canvasHeight) || (manager && manager.height) || p.height;
+            p.resizeCanvas(canvasW, canvasH);
+
             p.push();
-            p.background(255); // Clean white background
+            p.background("#fefefe"); // Clean white background
 
             if (!manager._heatLoaded) {
                 manager._heatLoaded = true;
@@ -127,24 +131,22 @@
                 return;
             }
 
-            const CANVAS_W = p.width;
-            const CANVAS_H = p.height;
+            const CANVAS_W = canvasW;
+            const CANVAS_H = canvasH;
 
-            // Reduced scale: smaller cells by ~35%
             const CELL = Math.min(
-                (CANVAS_W * 0.4) / INDICATORS.length,  // Reduced from 0.6
-                (CANVAS_H * 0.32) / PLATFORMS.length   // Reduced from 0.50
+                (CANVAS_W * 0.52) / INDICATORS.length,
+                (CANVAS_H * 0.38) / PLATFORMS.length
             );
 
-            // Reduced grid spacing
-            const GAP = CELL * 0.25;  // Reduced from 0.38
+            const GAP = CELL * 0.28;
 
             // Center heatmap horizontally
             const heatmapWidth = INDICATORS.length * CELL + (INDICATORS.length - 1) * GAP;
             const LEFT = (CANVAS_W - heatmapWidth) / 2;
 
             // Vertical positioning
-            const TOP = CANVAS_H * 0.20;
+            const TOP = CANVAS_H * 0.18;
 
             const minVal = 1;
             const maxVal = 5;

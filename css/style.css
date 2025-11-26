@@ -1,6 +1,6 @@
 /* 整页容器宽度 */
 .container {
-  width: 890px;
+  width: 1040px;
 }
 
 /* 顶部给可视化留空间 */
@@ -12,10 +12,11 @@
 #sections {
   position: relative;
   display: inline-block;
-  width: 250px;
+  width: 320px;
   top: 0px;
   z-index: 90;
   padding-bottom: 200px;
+  column-gap: 18px;
 }
 
 .step {
@@ -46,7 +47,7 @@
   position: fixed;
   top: 60px;
   z-index: 100;
-  margin-left: 0;
+  margin-left: 40px;
   background: #ffffff; /* Clean white background */
 }
 
