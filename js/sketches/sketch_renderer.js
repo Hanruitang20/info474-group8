@@ -30,10 +30,16 @@
         return;
       }
 
+      // SECTION 7 — Grouped Bar Chart
+      if (ai === 7 && window.VizGroupedBar) {
+        window.VizGroupedBar.draw(p, manager, ai, progress);
+        return;
+      }
+
       // SECTION 0–1 — Title (removed)
 
-      // SECTION 7–8 — basic examples
-      if (ai >= 7 && ai < 9 && window.VizScatter) {
+      // SECTION 8–9 — basic examples
+      if (ai >= 8 && ai < 10 && window.VizScatter) {
         window.VizScatter.draw(p, manager, ai, progress);
         return;
       }
