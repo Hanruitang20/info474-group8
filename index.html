@@ -16,17 +16,31 @@
       <div id='sections'>
 
         <!-- SECTION 0 — Title -->
-        <section class="step" data-active-index="0">
+        <section class="step step-fullwidth" data-active-index="0">
           <div class="title">Scrolling Through Our Minds: How Social Media Shapes the Emotional World of Young Adults</div>
-          Social media has become deeply embedded in the everyday lives of young adults. It fills transitional moments between classes, shapes how friendships are maintained, and influences how young people develop a sense of self. Yet despite its overwhelming presence, the emotional impact of social media is far from straightforward. This interactive article explores how social media shapes the emotional world of young adults by examining multiple layers of influence — from usage intensity to platform environments to usage quality to demographic differences. Together, these layers reveal a richer and more nuanced story about how digital habits affect emotional well-being.
+          <p>
+            Social media has become deeply embedded in the everyday lives of young adults. It fills transitional moments between classes, shapes how friendships are maintained, and influences how young people develop a sense of self. Yet despite its overwhelming presence, the emotional impact of social media is far from straightforward.
+          </p>
+          <p>
+            This interactive article explores how social media shapes the emotional world of young adults by examining multiple layers of influence. We move from broad usage patterns to platform-level emotional climates, and finally to deeper content-level effects. Together, these layers reveal a richer and more nuanced story about how digital habits affect emotional well-being.
+          </p>
+          <p>
+            As you scroll through this story, you'll encounter data visualizations that illuminate different aspects of this complex relationship. Each visualization builds on the previous one, creating a comprehensive picture of how time spent online, platform choice, and content engagement all contribute to young adults' emotional experiences.
+          </p>
         </section>
 
         <!-- SECTION 1 — Introduction -->
-        <section class="step" data-active-index="1">
+        <section class="step step-fullwidth" data-active-index="1">
           <div class="title">A Space We All Live In</div>
-          Instead of asking whether social media is “good” or “bad,” we examine a more useful question:
-          <b>How do different platforms, habits, and content categories shape how we feel?</b>
-          Using three datasets, we move from broad usage patterns → platform-level emotional climates → deeper content-level influences.
+          <p>
+            Instead of asking whether social media is "good" or "bad," we examine a more useful question: <strong>How do different platforms, habits, and content categories shape how we feel?</strong>
+          </p>
+          <p>
+            To answer this, we draw on three complementary datasets that capture different dimensions of young adults' digital lives. The first dataset reveals baseline patterns of device attachment and usage intensity. The second explores how different platforms create distinct emotional environments. The third examines how specific content types and engagement behaviors influence emotional outcomes.
+          </p>
+          <p>
+            As we move through these layers, you'll see that the relationship between social media and emotional well-being is not a simple cause-and-effect story. Instead, it's a dynamic interplay where time, platform, content, and individual differences all matter. The visualizations that follow will help you explore these connections interactively.
+          </p>
         </section>
 
         <!-- SECTION 2 — Dataset 1: Usage + Addiction (Boxplot) -->
@@ -46,14 +60,44 @@
           </p>
         </section>
 
-        <!-- SECTION 3 — Placeholder -->
+        <!-- SECTION 3 — Daily Usage Histogram -->
         <section class="step" data-active-index="3">
-          <div class="title">section 3</div>
+          <div class="title">Daily Usage: How Much Time Do We Spend?</div>
+          The histogram reveals a clear pattern in how much time young adults spend on 
+          social media each day. Usage is far from evenly distributed — instead, it clusters 
+          strongly around the <strong>3 to 5-hour range</strong>, with the 4-hour bin containing 
+          the largest number of students. Very low (&lt;1 hr) and very high (&gt;7 hrs) usage levels 
+          are relatively rare.
+          <br><br>
+          This distribution establishes an important baseline: most young adults are not casual 
+          users. Multiple hours of daily engagement mean more frequent exposure to emotionally 
+          charged content — comparison posts, rapid-fire feeds, and algorithm-driven updates. 
+          The point is not that screen time alone determines emotional well-being, but that 
+          <strong>higher usage increases the opportunity for emotionally stressful encounters</strong>.
+          <br><br>
+          Understanding this baseline sets up the next question: if most students already spend 
+          several hours online, <strong>does increasing usage start to affect emotional well-being?</strong>
         </section>
 
-        <!-- SECTION 4 — Placeholder -->
+        <!-- SECTION 4 — Scatterplot -->
         <section class="step" data-active-index="4">
-          <div class="title">section 4</div>
+          <div class="title">Does More Time Mean More Emotional Strain?</div>
+          The scatterplot shows a noticeable downward trend between <strong>daily usage hours</strong> 
+          and <strong>mental health scores</strong>. While individual experiences vary, the overall pattern 
+          is clear: students who spend more hours on social media tend to report lower mental 
+          health ratings.
+          <br><br>
+          Those using social media for <strong>1–2 hours per day</strong> cluster toward higher well-being 
+          scores, whereas usage levels above <strong>5 hours</strong> increasingly appear in the lower score 
+          range. This suggests that time acts as an amplifier of emotional strain — more hours 
+          mean greater exposure to overstimulation, comparison cycles, or emotionally taxing 
+          content.
+          <br><br>
+          Yet the scatter also shows substantial variation: students with similar usage levels 
+          sometimes report very different emotional experiences. This indicates that usage time 
+          alone cannot explain everything. Even when two people spend the same number of hours 
+          online, their emotional outcomes may differ dramatically depending on 
+          <strong>which platforms</strong> they use and the environments those platforms create.
         </section>
 
         <!-- SECTION 5 — Dataset 3: Platform Emotional Climate (Heatmap) -->
@@ -177,12 +221,13 @@
   <script src="js/sketches/viz/viz_title.js"></script>
   <script src="js/sketches/viz/viz_scatter.js"></script>
   <script src="js/sketches/viz/viz_bar.js"></script>
-  <script src="js/sketches/viz/viz_platform.js"></script>
   <script src="js/sketches/viz/viz_phone_boxplot.js"></script>
   <script src="js/sketches/viz/viz_heatmap_mental_health.js"></script>
   <script src="js/sketches/viz/viz_grouped_bar.js"></script>
   <script src="js/sketches/viz/viz_emotions.js"></script>
-<script src="js/sketches/viz/viz_social_media_stress.js"></script>
+  <script src="js/sketches/viz/viz_usage_histogram.js"></script>
+  <script src="js/sketches/viz/viz_usage_scatter.js"></script>
+  <script src="js/sketches/viz/viz_social_media_stress.js"></script>
 
 
   <!-- renderer -->

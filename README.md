@@ -1,80 +1,225 @@
-## Scroll-demo (p5.js scrollytelling template)
+# How Social Media Shapes the Emotional World of Young Adults
 
-A minimal scaffold for building scroll-driven p5.js visuals. Keep things simple: HTML sections in `index.html` drive the visual state exposed by `js/helpers/sections.js`.
+An interactive data storytelling project that explores the complex relationship between social media usage and emotional well-being among young adults. This scrollytelling visualization uses multiple datasets and interactive charts to reveal how different platforms, usage patterns, and content types influence emotional outcomes.
 
-Top-level folders (high level)
-- `index.html` — page with sections that drive the scroll state.
-- `css/` — styles for layout and the visualization container.
-- `data/` — static data files (e.g., `words.tsv`).
-- `js/helpers/` — small utilities: data loading, scroller, and visual controller.
-- `js/sketches/` — sketch runtime and renderers:
+## Project Overview
 
-	- `sketch_manager.js` — p5 lifecycle and public API (startP5, setState, setData, ready).
-	- `sketch_renderer.js` — delegator that calls small per-viz modules.
-	- `examples/` — example renderer(s) (e.g., `examples/sketch_grid.js`).
-	- `viz/` — per-visual files (e.g., `viz_title.js`, `viz_scatter.js`, `viz_bar.js`).
+This project presents a data-driven narrative that moves through multiple layers of analysis:
 
-Quick start
-1. Run a local static server from the repo root:
+1. **Baseline Usage Patterns** - Understanding how much time young adults spend on social media
+2. **Platform-Level Effects** - Examining how different platforms create distinct emotional environments
+3. **Content-Level Influences** - Exploring how specific engagement behaviors affect emotional well-being
+4. **Demographic Patterns** - Identifying which groups may be most vulnerable to emotional impacts
+
+## The Narrative Structure
+
+The article is organized as a scrolling narrative with 10 sections:
+
+- **Sections 0-1**: Introduction and framing (full-width text layout)
+- **Section 2**: Phone addiction baseline (boxplot visualization)
+- **Section 3**: Daily usage distribution (histogram)
+- **Section 4**: Usage vs. mental health relationship (scatterplot with trend line)
+- **Section 5**: Platform emotional climates (heatmap)
+- **Section 6**: Content-level effects (interactive emotion card)
+- **Section 7**: Demographic patterns (grouped bar chart)
+- **Sections 8-9**: Reflection and conclusion
+
+As users scroll, visualizations appear and update on the right side of the screen, creating an immersive data storytelling experience.
+
+## Datasets
+
+The project uses three key datasets:
+
+### 1. Students Social Media Addiction Dataset
+- **Source**: `data/Students Social Media Addiction.csv`
+- **Key Variables**: 
+  - `Avg_Daily_Usage_Hours` - Average hours spent on social media per day
+  - `Mental_Health_Score` - Self-reported mental health score (1-5 scale, higher = more distress)
+  - `Country`, `Gender` - Demographic variables
+  - `Most_Used_Platform` - Primary social media platform
+- **Used in**: Histogram (Section 3), Scatterplot (Section 4), Platform scatterplot visualization
+
+### 2. Social Media and Mental Health Dataset
+- **Source**: `data/social_media_and_mental_health.csv`
+- **Key Variables**:
+  - Platform usage indicators
+  - Emotional difficulty scores across multiple dimensions:
+    - Bothered by worries
+    - Difficulty concentrating
+    - Social comparison frequency
+    - Feeling depressed
+- **Used in**: Heatmap visualization (Section 5) showing platform emotional climates
+
+### 3. Emotional Well-Being Dataset
+- **Source**: `data/emotional_well_being.csv`
+- **Key Variables**:
+  - User engagement metrics
+  - Dominant emotions by platform
+  - Age and demographic information
+- **Used in**: Interactive emotion card visualization (Section 6)
+
+## Visualizations
+
+### Histogram (Section 3)
+- **File**: `js/sketches/viz/viz_usage_histogram.js`
+- **Shows**: Distribution of daily social media usage hours
+- **Features**: 
+  - Equal-interval bins (0-1, 1-2, 2-3 hours, etc.)
+  - Hover tooltips showing usage range and student count
+  - Reveals clustering around 3-5 hour range
+
+### Scatterplot (Section 4)
+- **File**: `js/sketches/viz/viz_usage_scatter.js`
+- **Shows**: Relationship between usage hours and mental health scores
+- **Features**:
+  - Linear regression trend line
+  - Point jitter to reduce overlap
+  - Hover tooltips with interpretation (positive/moderate/strain/distress)
+  - Reveals downward trend: more usage correlates with lower well-being
+
+### Platform Heatmap (Section 5)
+- **File**: `js/sketches/viz/viz_heatmap_mental_health.js`
+- **Shows**: Emotional difficulty scores across platforms and indicators
+- **Features**:
+  - Color-coded cells (cooler = better, warmer = more strain)
+  - Platforms: Instagram, TikTok, Reddit, YouTube
+  - Indicators: worries, concentration, comparison, depression
+  - Reveals TikTok as most emotionally demanding
+
+### Phone Addiction Boxplot (Section 2)
+- **File**: `js/sketches/viz/viz_phone_boxplot.js`
+- **Shows**: Distribution of phone addiction scores
+- **Features**: Standard boxplot showing quartiles and outliers
+- **Reveals**: High baseline attachment to devices
+
+### Interactive Emotion Card (Section 6)
+- **File**: `js/sketches/viz/viz_emotions.js`
+- **Shows**: Relationship between engagement and dominant emotions
+- **Features**: 
+  - Platform filter dropdown
+  - Age slider
+  - Real-time updates of emoji, colors, and metrics
+
+### Grouped Bar Chart (Section 7)
+- **File**: `js/sketches/viz/viz_grouped_bar.js`
+- **Shows**: Emotional difficulty by age group and gender
+- **Features**: Grouped bars comparing demographic segments
+
+## Technical Architecture
+
+### Scrolling Interaction Design
+
+The project uses a scroll-driven visualization system where:
+
+- **Sections** in the HTML (`<section class="step">`) drive the visual state
+- **Scroller** (`js/helpers/scroller.js`) computes the active section index based on scroll position
+- **Visual Controller** (`js/helpers/visual_controller.js`) shows/hides the canvas based on active index
+- **Sketch Manager** (`js/sketches/sketch_manager.js`) manages the p5.js lifecycle
+- **Renderer** (`js/sketches/sketch_renderer.js`) delegates drawing to specific visualization modules
+
+The visualization canvas appears starting at Section 2 and remains visible for data-driven sections. Sections 0 and 1 use a full-width text layout without the canvas.
+
+### Codebase Structure
+
+```
+info474-group8/
+├── index.html              # Main HTML with narrative sections
+├── css/
+│   └── style.css           # Layout and typography styles
+├── data/                   # CSV datasets
+│   ├── Students Social Media Addiction.csv
+│   ├── social_media_and_mental_health.csv
+│   └── emotional_well_being.csv
+├── js/
+│   ├── helpers/
+│   │   ├── data_loader.js      # TSV parsing utilities
+│   │   ├── scroller.js         # Scroll position tracking
+│   │   ├── visual_controller.js # Canvas show/hide logic
+│   │   └── sections.js         # Orchestrator wiring everything together
+│   └── sketches/
+│       ├── sketch_manager.js   # p5.js lifecycle management
+│       ├── sketch_renderer.js  # Delegates to visualization modules
+│       └── viz/                # Individual visualization modules
+│           ├── viz_usage_histogram.js
+│           ├── viz_usage_scatter.js
+│           ├── viz_heatmap_mental_health.js
+│           ├── viz_phone_boxplot.js
+│           ├── viz_emotions.js
+│           └── viz_grouped_bar.js
+└── README.md
+```
+
+### Key Components
+
+**Sketch Manager** (`sketch_manager.js`):
+- Creates and manages the p5.js instance
+- Exposes API: `setState()`, `setData()`, `ready` Promise
+- Handles canvas creation and frame rendering
+
+**Renderer** (`sketch_renderer.js`):
+- Routes draw calls to appropriate visualization based on `activeIndex`
+- Each visualization module exports `window.VizName.draw(p, manager, ai, progress)`
+
+**Visualization Modules**:
+- Each module in `viz/` is self-contained
+- Implements `setData()` for async data loading
+- Implements `draw()` for rendering
+- Uses manager's `width`, `height`, and `margin` for layout
+
+## Running Locally
+
+1. **Start a local server** (required for loading CSV files):
+
 	 ```bash
+   # Using Python 3
 	 python3 -m http.server 8000
-	 ```
-2. Open http://localhost:8000 and scroll through the sections to see the visuals.
+   
+   # Or using Node.js http-server
+   npx http-server -p 8000
+   ```
 
-Deploy
-- You can publish this repo with GitHub Pages (use a `gh-pages` branch or the `docs/` folder) or any static host.
+2. **Open in browser**:
+   ```
+   http://localhost:8000
+   ```
 
-Contributing / notes
-- Keep the script order in `index.html`: helpers → optional viz modules/examples → `sketch_renderer.js` → `sketch_manager.js`.
-- Add new visuals by creating a file under `js/sketches/viz/` that exposes `window.YourViz.draw(p, manager, ai, progress)` and include it before `sketch_renderer.js`.
+3. **Scroll through the article** to see visualizations appear and update.
 
-That's it — the repo is intentionally small so you can swap in your own visuals quickly.
+## Deployment
 
-## Scrollytelling demo (refactored)
+The project can be deployed to any static hosting service:
 
-This repository is a scroll-driven visualization demo. It was refactored away from D3 rendering and now uses p5.js for rendering and small, focused helper modules for scrolling and data loading.
+- **GitHub Pages**: Push to `gh-pages` branch or use `docs/` folder
+- **Netlify**: Connect repository for automatic deployments
+- **Vercel**: Deploy as static site
 
-High-level architecture
-- `index.html` — page content and configuration (see `window.ScrollDemoConfig`).
-- `css/` — styles including layout and classes that show/hide the visualization.
-- `data/` — source data (`words.tsv`).
-- `js/helpers/` — small utility modules:
-	- `data_loader.js` — TSV parser and `DataLoader.preprocess(data)` helper.
-	- `scroller.js` — computes active step index and progress; configurable `trigger` ('center' | 'top').
-	- `visual_controller.js` — controls when `#vis` should be visible (uses `showAt`).
-	- `sections.js` — orchestrator: starts the sketch and wires scroller -> sketch API (dataset-agnostic).
-- `js/sketches/` — rendering code (pluggable renderers):
-	- `sketch_manager.js` — p5 lifecycle and manager (data-agnostic). Exposes `startP5()` which returns an API object. The API exposes a `ready` Promise that resolves when data/layout are ready.
-	- `examples/sketch_grid.js` — an example grid renderer (moved to `js/sketches/examples/sketch_grid.js`). This file registers a `window.TemplateRenderer` (an example implementation). A small shim remains at `js/sketches/sketch_grid.js` that warns about the move to preserve compatibility with old imports.
-	- `viz/` — small per-visual modules (optional). Examples provided:
-		- `viz_title.js` — title screens (active indexes 0 and 1)
-		- `viz_scatter.js` — data-agnostic scatter example
-		- `viz_bar.js` — simple bar chart example (active index 7)
-	  These files are loaded before `sketch_renderer.js` and `sketch_renderer` delegates draw calls to them when present.
+Ensure all files maintain their relative paths.
 
-Key APIs and contracts
-- Configuration: set `window.ScrollDemoConfig` in `index.html` (or via `data-` attributes on `#graphic`). Important keys:
-	- `dataUrl` — path to TSV data (default `data/words.tsv`).
-	- `containerSelector`, `stepSelector`, `visSelector` — DOM selectors.
-	- `showAt` — numeric index where the visual should become visible (0-based). A value of `0` is honored.
-	- `trigger` — `'center'` or `'top'` to control scroller trigger position.
+## Limitations
 
-- Data loading and preprocessing:
-	- `js/helpers/data_loader.js` exposes `DataLoader.loadTSV(url)` and `DataLoader.preprocess(data)`.
-	- `Renderer.setData(manager, rawData)` — the renderer contract for preprocessing and layout. The example grid renderer implements this behavior (see `js/sketches/examples/sketch_grid.js` as `TemplateRenderer`). Implementations should call `DataLoader.preprocess` and compute layout (x/y positions, rows/cols) and cached aggregates (e.g., `_fillerIndices`, `_totalFillers`) on the `manager` object. `Renderer.setData` may return a Promise when it performs async loads; callers can await it.
+- **Data Loading**: Visualizations load data asynchronously, so there may be a brief "Loading..." state
+- **Browser Compatibility**: Requires modern browser with ES6+ support
+- **Screen Size**: Optimized for desktop/laptop viewing (1040px container width)
+- **CSV Parsing**: Simple comma-splitting (may not handle complex CSV with quoted fields containing commas)
 
-- Renderer contract (globally exposed):
-	- `window.Renderer.setData(manager, rawData)` — preprocess and attach layout/data to the manager.
-	- `window.Renderer.draw(p, manager, activeIndex, progress)` — called each p5 frame to draw visuals based on current state.
+## Future Improvements
 
-Note on visual organization
-- This project uses a small delegator (`js/sketches/sketch_renderer.js`) that calls into optional per-viz modules under `js/sketches/viz/` when available. If you add new visual modules, expose a global object with a `draw(p, manager, ai, progress)` function and load the script before `sketch_renderer.js` in `index.html`.
+- [ ] Improve CSV parsing to handle quoted fields and edge cases
+- [ ] Add responsive design for mobile devices
+- [ ] Implement smooth transitions between visualizations
+- [ ] Add export functionality for charts
+- [ ] Include statistical significance indicators
+- [ ] Add more interactive filtering options
+- [ ] Improve accessibility (ARIA labels, keyboard navigation)
+- [ ] Add data source citations and methodology notes
 
-Note: `Renderer.setData` may return a Promise when it performs an async load (e.g., when given a URL or when loading the default TSV). The sketch manager exposes an `api.ready` Promise that resolves once data/layout are available.
+## Credits
 
-- Sketch API (returned by `startP5` and exposed as `window.__sketchAPI`):
-	- `setState({ activeIndex, progress })` — update active step and transition progress.
-	- `setData(data)` — delegate to `Renderer.setData` to update underlying data (layout remains stable unless renderer recomputes it).
-	- `p5` — the raw p5 instance (mostly for advanced debugging).
-	- `data` — reference to processed data on the manager. Note that `data` may be populated asynchronously after `api.ready` resolves.
-	- `ready` — a Promise that resolves to the API object once data/layout are available. Consumers that need immediate access to processed data should await `api.ready` before reading `api.data`.
+Built using:
+- [p5.js](https://p5js.org/) for rendering
+- [Inter](https://rsms.me/inter/) font family
+- Custom scrollytelling framework
+
+## License
+
+This project is for educational purposes as part of INFO 474 coursework.
