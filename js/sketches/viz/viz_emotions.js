@@ -69,8 +69,8 @@ window.VizEmotions = (function () {
     function draw(p, manager, activeIndex) {
         loadData(p);
 
-        // --- ONLY SHOW IN SECTION 4 ---
-        if (activeIndex !== 4) {
+        // --- ONLY SHOW IN SECTION 6 ---
+        if (activeIndex !== 6) {
             p.clear();
             // Hide controls when not in section 4
             if (dropdown) {
@@ -82,7 +82,8 @@ window.VizEmotions = (function () {
             return;
         }
 
-        p.background(245);
+        p.resizeCanvas(manager.canvasWidth || (manager.width || 600), manager.canvasHeight || (manager.height || 520));
+        p.background("#f7f9fc");
         p.textFont('Arial');
 
         if (!ready) {
@@ -92,8 +93,12 @@ window.VizEmotions = (function () {
             return;
         }
 
-        // --- Dropdown inside card ---
-        let cardX = 50, cardY = 80, cardW = 500, cardH = 500;
+        // --- Card layout anchored to canvas width ---
+        const cardPadding = 60;
+        const cardW = Math.min(620, p.width - cardPadding * 2);
+        const cardX = (p.width - cardW) / 2;
+        const cardY = 80;
+        const cardH = Math.min(500, p.height - cardY - 70);
 
         // Get canvas position on screen
         const canvasRect = p.canvas.getBoundingClientRect();
@@ -106,17 +111,21 @@ window.VizEmotions = (function () {
             dropdown.style('z-index', '1000');
         }
         dropdown.style('display', 'block');
-        dropdown.position(canvasRect.left + window.scrollX + cardX + 20, canvasRect.top + window.scrollY + cardY + 10);
+        const dropdownX = cardX + 20;
+        const controlsY = cardY + 10;
+        dropdown.position(canvasRect.left + window.scrollX + dropdownX, canvasRect.top + window.scrollY + controlsY);
 
         // --- Age slider inside card ---
         if (!ageSlider) {
             ageSlider = p.createSlider(minAge, maxAge, maxAge, 1);
-            ageSlider.style('width', '200px');
             ageSlider.style('position', 'absolute');
             ageSlider.style('z-index', '1000');
         }
         ageSlider.style('display', 'block');
-        ageSlider.position(canvasRect.left + window.scrollX + cardX + 150, canvasRect.top + window.scrollY + cardY + 10);
+        const sliderWidth = Math.min(240, Math.max(160, cardW - 220));
+        ageSlider.style('width', sliderWidth + 'px');
+        const sliderX = cardX + cardW - sliderWidth - 30;
+        ageSlider.position(canvasRect.left + window.scrollX + sliderX, canvasRect.top + window.scrollY + controlsY);
 
         // --- Filter rows ---
         const maxAgeSelected = ageSlider.value();
@@ -149,7 +158,7 @@ window.VizEmotions = (function () {
         p.rect(cardX, cardY, cardW, cardH, 20);
 
         // Image area
-        const imgH = 350;
+        const imgH = Math.min(cardH * 0.62, 320);
         p.fill(emotionColors[dominantEmotion]);
         p.rect(cardX + 10, cardY + 40, cardW - 20, imgH - 20, 15);
 
@@ -165,7 +174,7 @@ window.VizEmotions = (function () {
         p.fill(245);
         p.rect(cardX + 10, panelY, cardW - 20, panelH - 10, 10);
 
-        const spacing = 100;
+        const spacing = (cardW - 140) / metrics.length;
         const iconY = panelY + 40;
         p.textAlign(p.CENTER, p.CENTER);
 
@@ -173,12 +182,13 @@ window.VizEmotions = (function () {
             const scale = p.map(avgValues[i], 0, maxMetric, 30, 60);
             p.textSize(scale);
             p.fill(0);
-            p.text(metricIcons[i], cardX + 50 + i * spacing, iconY);
+            const iconX = cardX + 50 + i * spacing;
+            p.text(metricIcons[i], iconX, iconY);
 
             p.textSize(14);
-            p.text(`${avgValues[i].toFixed(1)}`, cardX + 50 + i * spacing, iconY + 25);
+            p.text(`${avgValues[i].toFixed(1)}`, iconX, iconY + 25);
 
-            p.text(metricLabels[i], cardX + 50 + i * spacing, iconY + 45);
+            p.text(metricLabels[i], iconX, iconY + 45);
         }
 
         // Dominant emotion badge
@@ -204,15 +214,11 @@ window.VizEmotions = (function () {
 
         // Draw slider labels AFTER everything else (so they're on top)
         if (ageSlider && ageSlider.style('display') === 'block') {
-            const sliderRect = {
-                left: canvasRect.left + window.scrollX + cardX + 150,
-                top: canvasRect.top + window.scrollY + cardY + 10
-            };
-            const sliderW = 200;
+            const sliderW = sliderWidth;
 
             // Convert absolute positions back to canvas coordinates for drawing
-            const sliderXOnCanvas = cardX + 150;
-            const sliderYOnCanvas = cardY + 10;
+            const sliderXOnCanvas = sliderX;
+            const sliderYOnCanvas = controlsY;
 
             p.fill(0);
             p.textSize(12);

@@ -12,32 +12,34 @@
       // `ai` = activeIndex from scroller
       // console.log("Renderer draw ai =", ai);
 
-      // SECTION 2 — Platform Viz
-      if (ai === 2 && window.VizPlatform) {
-        window.VizPlatform.draw(p, manager, ai, progress);
+      // SECTION 2 — Phone Addiction Boxplot
+      if (ai === 2 && window.VizPhoneBoxplot) {
+        window.VizPhoneBoxplot.draw(p, manager, ai, progress);
         return;
       }
 
-      // SECTION 3 — Heatmap
-      if (ai === 3 && window.VizHeatmapMentalHealth) {
+      // SECTION 5 — Heatmap
+      if (ai === 5 && window.VizHeatmapMentalHealth) {
         window.VizHeatmapMentalHealth.draw(p, manager, ai, progress);
         return;
       }
 
-      // SECTION 4 — Emotions
-      if (ai === 4 && window.VizEmotions) {
+      // SECTION 6 — Emotions
+      if (ai === 6 && window.VizEmotions) {
         window.VizEmotions.draw(p, manager, ai, progress); // pass activeIndex
         return;
       }
 
-      // SECTION 0–1 — Title
-      if (ai === 0 || ai === 1) {
-        window.VizTitle.draw(p, manager, ai, progress);
+      // SECTION 7 — Grouped Bar Chart
+      if (ai === 7 && window.VizGroupedBar) {
+        window.VizGroupedBar.draw(p, manager, ai, progress);
         return;
       }
 
-      // SECTION 5–6 — basic examples
-      if (ai >= 5 && ai < 7 && window.VizScatter) {
+      // SECTION 0–1 — Title (removed)
+
+      // SECTION 8–9 — basic examples
+      if (ai >= 8 && ai < 10 && window.VizScatter) {
         window.VizScatter.draw(p, manager, ai, progress);
         return;
       }

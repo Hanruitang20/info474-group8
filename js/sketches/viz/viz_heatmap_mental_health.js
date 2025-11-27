@@ -29,34 +29,33 @@
     function heatColor(value, min, max) {
         if (value == null || value === "") return [245, 245, 245];
 
-        let t = (value - min) / (max - min || 1);
+        const t = Math.max(0, Math.min(1, (value - min) / (max - min || 1)));
 
-        // Softer color scale: light yellow → amber → orange → warm red
-        if (t < 0.33) {
-            // Light yellow to amber
-            let k = t / 0.33;
+        // Darker as scores increase: teal -> green -> amber -> red
+        const blend = (a, b, k) => a + (b - a) * k;
+
+        if (t <= 0.33) {
+            const k = t / 0.33;
             return [
-                255,
-                245 - k * 80,
-                200 - k * 150
+                Math.round(blend(18, 34, k)),
+                Math.round(blend(120, 170, k)),
+                Math.round(blend(125, 90, k))
             ];
-        } else if (t < 0.66) {
-            // Amber to orange
-            let k = (t - 0.33) / 0.33;
+        } else if (t <= 0.66) {
+            const k = (t - 0.33) / 0.33;
             return [
-                255,
-                165 - k * 65,
-                50 + k * 50
-            ];
-        } else {
-            // Orange to warm red
-            let k = (t - 0.66) / 0.34;
-            return [
-                255,
-                100 - k * 55,
-                100 - k * 40
+                Math.round(blend(34, 240, k)),
+                Math.round(blend(170, 170, k)),
+                Math.round(blend(90, 50, k))
             ];
         }
+
+        const k = (t - 0.66) / 0.34;
+        return [
+            Math.round(blend(240, 178, k)),
+            Math.round(blend(170, 34, k)),
+            Math.round(blend(50, 34, k))
+        ];
     }
 
     function parsePlatforms(cell) {
@@ -71,8 +70,12 @@
     window.VizHeatmapMentalHealth = {
         draw: function (p, manager) {
 
+            const canvasW = (manager && manager.canvasWidth) || (manager && manager.width) || p.width;
+            const canvasH = (manager && manager.canvasHeight) || (manager && manager.height) || p.height;
+            p.resizeCanvas(canvasW, canvasH);
+
             p.push();
-            p.background(255); // Clean white background
+            p.background("#fefefe"); // Clean white background
 
             if (!manager._heatLoaded) {
                 manager._heatLoaded = true;
@@ -127,24 +130,24 @@
                 return;
             }
 
-            const CANVAS_W = p.width;
-            const CANVAS_H = p.height;
+            const CANVAS_W = canvasW;
+            const CANVAS_H = canvasH;
 
-            // Reduced scale: smaller cells by ~35%
+            const availableWidth = CANVAS_W * 0.78;
+            const availableHeight = CANVAS_H * 0.38;
             const CELL = Math.min(
-                (CANVAS_W * 0.4) / INDICATORS.length,  // Reduced from 0.6
-                (CANVAS_H * 0.32) / PLATFORMS.length   // Reduced from 0.50
+                (availableWidth - 90) / INDICATORS.length,
+                (availableHeight - 30) / PLATFORMS.length
             );
 
-            // Reduced grid spacing
-            const GAP = CELL * 0.25;  // Reduced from 0.38
+            const GAP = Math.min(CELL * 0.6, 40);
 
             // Center heatmap horizontally
             const heatmapWidth = INDICATORS.length * CELL + (INDICATORS.length - 1) * GAP;
             const LEFT = (CANVAS_W - heatmapWidth) / 2;
 
             // Vertical positioning
-            const TOP = CANVAS_H * 0.20;
+            const TOP = CANVAS_H * 0.24;
 
             const minVal = 1;
             const maxVal = 5;
@@ -174,17 +177,22 @@
             -------------------------- */
             p.fill(85); // #555
             p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(13.5);
+            p.textSize(12);
 
-            const colLabelY = TOP - CELL * 0.5;
+            const colLabelY = TOP - (CELL * 0.75);
 
             INDICATORS.forEach((ind, c) => {
-                let x = LEFT + c * (CELL + GAP) + CELL / 2;
-                let lines = ind.label.split("\n");
+                const x = LEFT + c * (CELL + GAP) + CELL / 2;
+                const lines = ind.label.split("\n");
+                const totalHeight = (lines.length - 1) * 16;
 
+                p.push();
+                p.textAlign(p.CENTER, p.CENTER);
                 lines.forEach((line, i) => {
-                    p.text(line, x, colLabelY + i * 16);
+                    const y = colLabelY + i * 16 - totalHeight / 2;
+                    p.text(line, x, y);
                 });
+                p.pop();
             });
 
             /* -------------------------
@@ -192,7 +200,7 @@
             -------------------------- */
             p.fill(85); // #555
             p.textAlign(p.RIGHT, p.CENTER);
-            p.textSize(14);
+            p.textSize(13.5);
 
             PLATFORMS.forEach((plat, r) => {
                 let y = TOP + r * (CELL + GAP) + CELL / 2;
@@ -266,7 +274,7 @@
             /* -------------------------
                LEGEND — Improved & Centered
             -------------------------- */
-            const legendWidth = CANVAS_W * 0.35;  // Shorter bar
+            const legendWidth = CANVAS_W * 0.45;  // Wider bar
             const legendHeight = 18;
 
             const heatmapBottom = TOP + PLATFORMS.length * (CELL + GAP);
@@ -291,18 +299,26 @@
 
             p.textAlign(p.CENTER, p.BOTTOM);
             p.text(
-                "Emotional Well-Being Scale",
+                "Emotional Well-Being Scale (1 = healthier, 5 = more strain)",
                 CANVAS_W / 2,
-                legendY - 6
+                legendY - 12
             );
 
             p.fill(102); // #666
             p.textSize(10.5);
             p.textAlign(p.LEFT, p.TOP);
-            p.text("cooler = better well-being", legendX, legendY + legendHeight + 8);
+            p.text("cooler = better well-being", legendX, legendY + legendHeight + 4);
 
             p.textAlign(p.RIGHT, p.TOP);
-            p.text("warmer = more emotional strain", legendX + legendWidth, legendY + legendHeight + 8);
+            p.text("warmer = more emotional strain", legendX + legendWidth, legendY + legendHeight + 4);
+            
+            // Annotation callout on the right side
+            const noteX = legendX + legendWidth + 50;
+            const noteY = TOP + (PLATFORMS.length * (CELL + GAP)) / 2 - 20;
+            p.fill(60);
+            p.textSize(13);
+            p.textAlign(p.LEFT, p.TOP);
+            p.text("TikTok stands out as having the most strained emotional atmosphere.", noteX, noteY, CANVAS_W - noteX - 20, 80);
 
             p.pop();
         }
