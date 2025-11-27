@@ -2,6 +2,7 @@
 (function () {
   window.VizUsageHistogram = {
     data: null,
+    hoverBin: null,
 
     setData: async function () {
       if (this.data) return this.data;
@@ -20,10 +21,9 @@
 
         this.data = rows.slice(1).map(r => {
           const c = r.split(",");
-          return {
-            usage: Number(c[idxUsage])
-          };
-        });
+          const val = Number(c[idxUsage]);
+          return isNaN(val) ? null : val;
+        }).filter(v => v !== null && v >= 0);
 
         return this.data;
       } catch (err) {
@@ -33,41 +33,154 @@
       }
     },
 
-    draw: function (p, manager) {
+    draw: function (p, manager, ai, progress) {
+      if (ai !== 3) return;
+
+      p.background(255);
       p.push();
       p.translate(manager.margin.left, manager.margin.top);
 
       if (!this.data || this.data.length === 0) {
-        p.fill(0);
+        p.fill(85);
         p.textSize(16);
-        p.text("Loading usage data...", 20, 40);
+        p.textAlign(p.CENTER, p.CENTER);
+        p.text("Loading usage data...", manager.width / 2, manager.height / 2);
         p.pop();
         return;
       }
 
-      const usages = this.data.map(d => d.usage);
-      const bins = [0,1,2,3,4,5,6,7,8];
-      const counts = Array(bins.length).fill(0);
+      const usages = this.data.filter(u => !isNaN(u) && u >= 0);
+      const maxUsage = Math.max(...usages);
+      const binCount = 12;
+      const binSize = maxUsage / binCount;
+
+      // Create bins
+      const bins = Array(binCount).fill(0);
+      const binRanges = [];
+      for (let i = 0; i < binCount; i++) {
+        binRanges.push({
+          min: i * binSize,
+          max: (i + 1) * binSize,
+          count: 0
+        });
+      }
 
       usages.forEach(u => {
-        let i = Math.min(Math.floor(u), bins.length - 1);
-        counts[i]++;
+        let idx = Math.min(Math.floor(u / binSize), binCount - 1);
+        bins[idx]++;
+        binRanges[idx].count++;
       });
 
-      const barW = manager.width / bins.length;
-      const maxCount = Math.max(...counts);
+      const maxCount = Math.max(...bins);
 
-      p.textSize(14);
-      p.fill(0);
+      // Chart area
+      const chartX = 60;
+      const chartY = 40;
+      const chartW = manager.width - 100;
+      const chartH = manager.height - 100;
+      const barW = chartW / binCount;
 
-      for (let i = 0; i < bins.length; i++) {
-        const barH = p.map(counts[i], 0, maxCount, 0, manager.height - 60);
-        p.fill(140, 160, 210);
-        p.rect(i * barW, manager.height - barH - 20, barW - 6, barH);
+      // Draw gridlines
+      p.stroke(230);
+      p.strokeWeight(1);
+      for (let i = 0; i <= 5; i++) {
+        const y = chartY + (chartH / 5) * i;
+        p.line(chartX, y, chartX + chartW, y);
+      }
 
-        p.fill(0);
-        p.textAlign(p.CENTER);
-        p.text(`${bins[i]}h`, i * barW + barW / 2, manager.height - 5);
+      // Draw bars
+      this.hoverBin = null;
+      for (let i = 0; i < binCount; i++) {
+        const barH = bins[i] > 0 ? (bins[i] / maxCount) * chartH : 0;
+        const x = chartX + i * barW;
+        const y = chartY + chartH - barH;
+
+        // Hover detection
+        const isHover = p.mouseX >= x && p.mouseX <= x + barW &&
+                       p.mouseY >= chartY && p.mouseY <= chartY + chartH;
+
+        if (isHover && bins[i] > 0) {
+          this.hoverBin = { index: i, range: binRanges[i], count: bins[i] };
+          p.fill(255, 120, 160); // Brighter blue on hover
+        } else {
+          p.fill(255, 170, 200); // Distinct blue color
+        }
+
+        p.noStroke();
+        p.rect(x, y, barW - 2, barH);
+
+        // Bin label
+        if (bins[i] > 0) {
+          p.fill(60);
+          p.textSize(9);
+          p.textAlign(p.CENTER, p.TOP);
+          const label = i === binCount - 1 
+            ? `${(i * binSize).toFixed(1)}+`
+            : `${(i * binSize).toFixed(1)}-${((i + 1) * binSize).toFixed(1)}`;
+          p.text(label, x + barW / 2, chartY + chartH + 5);
+        }
+      }
+
+      // Y-axis labels
+      p.fill(85);
+      p.textSize(10);
+      p.textAlign(p.RIGHT, p.CENTER);
+      for (let i = 0; i <= 5; i++) {
+        const y = chartY + (chartH / 5) * (5 - i);
+        const value = Math.round((maxCount / 5) * i);
+        p.text(value.toString(), chartX - 8, y);
+      }
+
+      // Axes
+      p.stroke(60);
+      p.strokeWeight(1.5);
+      p.line(chartX, chartY, chartX, chartY + chartH);
+      p.line(chartX, chartY + chartH, chartX + chartW, chartY + chartH);
+
+      // Axis labels
+      p.fill(34);
+      p.textSize(12);
+      p.textStyle(p.NORMAL);
+      p.textAlign(p.CENTER, p.TOP);
+      p.text("Daily Social Media Usage (hrs/day)", chartX + chartW / 2, chartY + chartH + 25);
+
+      p.push();
+      p.translate(chartX - 35, chartY + chartH / 2);
+      p.rotate(-p.HALF_PI);
+      p.textAlign(p.CENTER, p.CENTER);
+      p.textStyle(p.NORMAL);
+      p.text("Number of Students", 0, 0);
+      p.pop();
+
+      // Hover tooltip
+      if (this.hoverBin && this.hoverBin.count > 0) {
+        const h = this.hoverBin;
+        const tooltipX = p.mouseX + 15;
+        const tooltipY = p.mouseY - 50;
+        const boxW = 180;
+        const boxH = 65;
+
+        // Shadow
+        p.fill(0, 15);
+        p.noStroke();
+        p.rect(tooltipX + 2, tooltipY + 2, boxW, boxH, 6);
+
+        // Tooltip box
+        p.fill(255, 245);
+        p.stroke(200, 180);
+        p.strokeWeight(1);
+        p.rect(tooltipX, tooltipY, boxW, boxH, 6);
+
+        // Tooltip text
+        p.noStroke();
+        p.fill(34);
+        p.textSize(12);
+        p.textAlign(p.LEFT, p.TOP);
+        const rangeText = h.index === binCount - 1
+          ? `${h.range.min.toFixed(1)}+ hrs`
+          : `${h.range.min.toFixed(1)}-${h.range.max.toFixed(1)} hrs`;
+        p.text(`Range: ${rangeText}`, tooltipX + 10, tooltipY + 12);
+        p.text(`Count: ${h.count} students`, tooltipX + 10, tooltipY + 32);
       }
 
       p.pop();
