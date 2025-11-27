@@ -94,11 +94,11 @@ window.VizEmotions = (function () {
         }
 
         // --- Card layout anchored to canvas width ---
-        const cardPadding = 60;
-        const cardW = Math.min(620, p.width - cardPadding * 2);
+        const cardPadding = 40;
+        const cardW = Math.min(580, p.width - cardPadding * 2);
         const cardX = (p.width - cardW) / 2;
-        const cardY = 80;
-        const cardH = Math.min(500, p.height - cardY - 70);
+        const cardY = 60;
+        const cardH = Math.min(480, p.height - cardY - 100);
 
         // Get canvas position on screen
         const canvasRect = p.canvas.getBoundingClientRect();
@@ -112,7 +112,7 @@ window.VizEmotions = (function () {
         }
         dropdown.style('display', 'block');
         const dropdownX = cardX + 20;
-        const controlsY = cardY + 10;
+        const controlsY = cardY + 20;
         dropdown.position(canvasRect.left + window.scrollX + dropdownX, canvasRect.top + window.scrollY + controlsY);
 
         // --- Age slider inside card ---
@@ -122,9 +122,9 @@ window.VizEmotions = (function () {
             ageSlider.style('z-index', '1000');
         }
         ageSlider.style('display', 'block');
-        const sliderWidth = Math.min(240, Math.max(160, cardW - 220));
+        const sliderWidth = Math.min(220, Math.max(160, cardW - 240));
         ageSlider.style('width', sliderWidth + 'px');
-        const sliderX = cardX + cardW - sliderWidth - 30;
+        const sliderX = cardX + cardW - sliderWidth - 20;
         ageSlider.position(canvasRect.left + window.scrollX + sliderX, canvasRect.top + window.scrollY + controlsY);
 
         // --- Filter rows ---
@@ -152,86 +152,113 @@ window.VizEmotions = (function () {
         const dominantEmotion = getDominantEmotion(filteredRows);
 
         // --- Card ---
-        p.stroke(200);
-        p.strokeWeight(1);
+        p.stroke(220);
+        p.strokeWeight(1.5);
         p.fill(255);
-        p.rect(cardX, cardY, cardW, cardH, 20);
+        p.rect(cardX, cardY, cardW, cardH, 16);
 
-        // Image area
-        const imgH = Math.min(cardH * 0.62, 320);
+        // Image area (post preview)
+        const imgPadding = 16;
+        const imgY = cardY + 60;
+        const imgH = Math.min(cardH * 0.55, 300);
+        const imgW = cardW - imgPadding * 2;
         p.fill(emotionColors[dominantEmotion]);
-        p.rect(cardX + 10, cardY + 40, cardW - 20, imgH - 20, 15);
+        p.rect(cardX + imgPadding, imgY, imgW, imgH, 12);
 
-        // Emoji
-        p.textSize(80);
+        // Emoji (centered in post preview)
+        p.textSize(90);
         p.textAlign(p.CENTER, p.CENTER);
         p.fill(255);
-        p.text(emotionEmojis[dominantEmotion], cardX + cardW / 2, cardY + 40 + imgH / 2);
+        p.text(emotionEmojis[dominantEmotion], cardX + cardW / 2, imgY + imgH / 2);
 
-        // Engagement panel
-        const panelY = cardY + 40 + imgH;
-        const panelH = cardH - imgH;
-        p.fill(245);
-        p.rect(cardX + 10, panelY, cardW - 20, panelH - 10, 10);
+        // Engagement metrics panel
+        const panelY = imgY + imgH + 20;
+        const panelH = cardH - (panelY - cardY) - 20;
+        p.fill(248);
+        p.noStroke();
+        p.rect(cardX + imgPadding, panelY, imgW, panelH, 10);
 
-        const spacing = (cardW - 140) / metrics.length;
-        const iconY = panelY + 40;
+        // Metrics in horizontal row
+        const metricsPadding = 24;
+        const metricsAreaW = imgW - metricsPadding * 2;
+        const spacing = metricsAreaW / metrics.length;
+        const metricsStartX = cardX + imgPadding + metricsPadding;
+        const metricsY = panelY + 28;
+        
         p.textAlign(p.CENTER, p.CENTER);
 
         for (let i = 0; i < metrics.length; i++) {
-            const scale = p.map(avgValues[i], 0, maxMetric, 30, 60);
+            const iconX = metricsStartX + i * spacing + spacing / 2;
+            
+            // Icon (reduced size)
+            const scale = p.map(avgValues[i], 0, maxMetric, 24, 36);
             p.textSize(scale);
-            p.fill(0);
-            const iconX = cardX + 50 + i * spacing;
-            p.text(metricIcons[i], iconX, iconY);
+            p.fill(40);
+            p.text(metricIcons[i], iconX, metricsY);
 
-            p.textSize(14);
-            p.text(`${avgValues[i].toFixed(1)}`, iconX, iconY + 25);
+            // Value (reduced font size)
+            p.textSize(11);
+            p.fill(60);
+            p.text(`${avgValues[i].toFixed(1)}`, iconX, metricsY + 22);
 
-            p.text(metricLabels[i], iconX, iconY + 45);
+            // Label (reduced font size)
+            p.textSize(10);
+            p.fill(100);
+            p.text(metricLabels[i], iconX, metricsY + 36);
         }
 
-        // Dominant emotion badge
+        // Dominant emotion badge (top right of post preview)
+        const badgeX = cardX + cardW - imgPadding - 25;
+        const badgeY = imgY + 25;
         p.fill(255);
-        p.stroke(0);
-        p.strokeWeight(1);
-        p.ellipse(cardX + cardW - 40, cardY + 40, 30, 30);
+        p.stroke(220);
+        p.strokeWeight(1.5);
+        p.ellipse(badgeX, badgeY, 32, 32);
         p.noStroke();
         p.fill(emotionColors[dominantEmotion]);
-        p.ellipse(cardX + cardW - 40, cardY + 40, 22, 22);
-        p.fill(0);
-        p.textSize(12);
+        p.ellipse(badgeX, badgeY, 24, 24);
+        p.fill(255);
+        p.textSize(10);
         p.textAlign(p.CENTER, p.CENTER);
-        p.text(dominantEmotion, cardX + cardW - 40, cardY + 40);
+        p.text(dominantEmotion, badgeX, badgeY);
 
-        // Info below card
-        p.textSize(14);
-        p.textAlign(p.LEFT);
+        // Info below card (aligned under metrics)
+        const infoY = cardY + cardH + 25;
+        p.textSize(13);
+        p.textAlign(p.CENTER);
         let avgEngagement = (avgValues.reduce((a, b) => a + b, 0) / metrics.length).toFixed(1);
-        p.fill(50);
-        p.text(`Dominant Emotion: ${dominantEmotion}`, cardX, cardY + cardH + 20);
-        p.text(`Average Engagement per User: ${avgEngagement}`, cardX, cardY + cardH + 40);
+        p.fill(60);
+        p.text(`Dominant Emotion: ${dominantEmotion}`, cardX + cardW / 2, infoY);
+        p.text(`Average Engagement per User: ${avgEngagement}`, cardX + cardW / 2, infoY + 20);
 
         // Draw slider labels AFTER everything else (so they're on top)
+        // Positioned with proper margin to avoid overlap with slider handle
         if (ageSlider && ageSlider.style('display') === 'block') {
             const sliderW = sliderWidth;
 
             // Convert absolute positions back to canvas coordinates for drawing
             const sliderXOnCanvas = sliderX;
-            const sliderYOnCanvas = controlsY;
+            const sliderYOnCanvas = controlsY + 25;
+            const labelYOffset = 30; // Increased spacing below slider to avoid handle overlap
 
-            p.fill(0);
-            p.textSize(12);
+            p.fill(80);
+            p.textSize(11);
             p.textAlign(p.LEFT, p.TOP);
-            p.text(minAge, sliderXOnCanvas, sliderYOnCanvas + 20);
+            // Position "Age: X" label with margin to avoid overlap
+            p.text(`Age: ${minAge}`, sliderXOnCanvas, sliderYOnCanvas + labelYOffset);
 
             p.textAlign(p.RIGHT, p.TOP);
-            p.text(maxAge, sliderXOnCanvas + sliderW, sliderYOnCanvas + 20);
+            // Position max age label with margin
+            p.text(`${maxAge}`, sliderXOnCanvas + sliderW, sliderYOnCanvas + labelYOffset);
 
+            // Current value label positioned above slider with safe margin
             p.textAlign(p.CENTER, p.BOTTOM);
             const currentVal = ageSlider.value();
             const thumbX = sliderXOnCanvas + (currentVal - minAge) / (maxAge - minAge) * sliderW;
-            p.text(currentVal, thumbX, sliderYOnCanvas - 5);
+            p.fill(40);
+            p.textSize(12);
+            // Position above slider track with safe margin (8px above)
+            p.text(currentVal, thumbX, sliderYOnCanvas - 8);
         }
     }
 
