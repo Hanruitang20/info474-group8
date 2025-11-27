@@ -51,22 +51,22 @@
 
       const usages = this.data.filter(u => !isNaN(u) && u >= 0);
       const maxUsage = Math.max(...usages);
-      const binCount = 12;
-      const binSize = maxUsage / binCount;
+      const binCount = Math.ceil(maxUsage); // Use integer bins: 0-1, 1-2, 2-3, etc.
+      const binSize = 1; // Equal interval of 1 hour
 
-      // Create bins
+      // Create bins with equal intervals
       const bins = Array(binCount).fill(0);
       const binRanges = [];
       for (let i = 0; i < binCount; i++) {
         binRanges.push({
-          min: i * binSize,
-          max: (i + 1) * binSize,
+          min: i,
+          max: i + 1,
           count: 0
         });
       }
 
       usages.forEach(u => {
-        let idx = Math.min(Math.floor(u / binSize), binCount - 1);
+        let idx = Math.min(Math.floor(u), binCount - 1);
         bins[idx]++;
         binRanges[idx].count++;
       });
@@ -109,16 +109,14 @@
         p.noStroke();
         p.rect(x, y, barW - 2, barH);
 
-        // Bin label
-        if (bins[i] > 0) {
-          p.fill(60);
-          p.textSize(9);
-          p.textAlign(p.CENTER, p.TOP);
-          const label = i === binCount - 1 
-            ? `${(i * binSize).toFixed(1)}+`
-            : `${(i * binSize).toFixed(1)}-${((i + 1) * binSize).toFixed(1)}`;
-          p.text(label, x + barW / 2, chartY + chartH + 5);
-        }
+        // Bin label - evenly spaced under each bar
+        p.fill(60);
+        p.textSize(9);
+        p.textAlign(p.CENTER, p.TOP);
+        const label = i === binCount - 1 
+          ? `${i}+`
+          : `${i}-${i + 1}`;
+        p.text(label, x + barW / 2, chartY + chartH + 5);
       }
 
       // Y-axis labels
@@ -137,7 +135,7 @@
       p.line(chartX, chartY, chartX, chartY + chartH);
       p.line(chartX, chartY + chartH, chartX + chartW, chartY + chartH);
 
-      // Axis labels
+      // Axis labels - normal weight
       p.fill(34);
       p.textSize(12);
       p.textStyle(p.NORMAL);
@@ -177,8 +175,8 @@
         p.textSize(12);
         p.textAlign(p.LEFT, p.TOP);
         const rangeText = h.index === binCount - 1
-          ? `${h.range.min.toFixed(1)}+ hrs`
-          : `${h.range.min.toFixed(1)}-${h.range.max.toFixed(1)} hrs`;
+          ? `${h.range.min}+ hrs`
+          : `${h.range.min}-${h.range.max} hrs`;
         p.text(`Range: ${rangeText}`, tooltipX + 10, tooltipY + 12);
         p.text(`Count: ${h.count} students`, tooltipX + 10, tooltipY + 32);
       }

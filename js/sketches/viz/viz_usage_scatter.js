@@ -75,6 +75,7 @@
       p.background(255);
       p.push();
       p.translate(manager.margin.left, manager.margin.top);
+      p.textStyle(p.NORMAL);
 
       if (!this.data || this.data.length === 0) {
         p.fill(85);
@@ -173,16 +174,16 @@
         p.text(value.toFixed(1), x, chartY + chartH + 8);
       }
 
-      // Y-axis ticks and labels
+      // Y-axis ticks and labels - integers only
       p.textAlign(p.RIGHT, p.CENTER);
       for (let i = 0; i <= 5; i++) {
         const y = chartY + (chartH / 5) * (5 - i);
-        const value = (yMax / 5) * i;
+        const value = Math.round((yMax / 5) * i);
         p.stroke(150);
         p.strokeWeight(1);
         p.line(chartX - 3, y, chartX + 3, y);
         p.noStroke();
-        p.text(value.toFixed(1), chartX - 8, y);
+        p.text(value.toString(), chartX - 8, y);
       }
 
       // Axis labels
@@ -197,6 +198,15 @@
       p.textAlign(p.CENTER, p.CENTER);
       p.text("Mental Health Score", 0, 0);
       p.pop();
+
+      // >>> NEW: Mental Health scale explanation <<<
+      p.fill(90);
+      p.textSize(11);
+      p.textAlign(p.CENTER, p.TOP);
+      p.text("Mental Health Score Scale: Higher scores = worse emotional well-being (more distress)",
+        chartX + chartW / 2,
+        chartY + chartH + 42
+    );
 
       // Hover tooltip
       if (this.hoverPoint) {
