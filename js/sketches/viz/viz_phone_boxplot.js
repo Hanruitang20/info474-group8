@@ -93,6 +93,9 @@ window.VizPhoneBoxplot = {
       
         this.drawBackground(p, manager);
       
+        // Set font to match article
+        p.textFont("Times New Roman");
+      
         if (this.error) {
           p.fill("#3a3a3a");
           p.textSize(16);

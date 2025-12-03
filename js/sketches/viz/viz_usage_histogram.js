@@ -39,6 +39,9 @@
       p.background(255);
       p.push();
       p.translate(manager.margin.left, manager.margin.top);
+      
+      // Set font to match article
+      p.textFont("Times New Roman");
 
       if (!this.data || this.data.length === 0) {
         p.fill(85);

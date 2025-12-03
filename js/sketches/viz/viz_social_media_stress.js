@@ -133,6 +133,9 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         const h = p.height;
 
         p.background(245);
+        
+        // Set font to match article
+        p.textFont("Times New Roman");
 
         // Show loading message if data not ready
         if (!dataLoaded || !rawData) {

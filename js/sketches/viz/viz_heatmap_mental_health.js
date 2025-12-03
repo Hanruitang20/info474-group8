@@ -76,6 +76,9 @@
 
             p.push();
             p.background("#fefefe"); // Clean white background
+            
+            // Set font to match article
+            p.textFont("Times New Roman");
 
             if (!manager._heatLoaded) {
                 manager._heatLoaded = true;
