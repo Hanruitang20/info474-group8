@@ -39,13 +39,13 @@
       return manager.data;
     },
 
+
     // Load the section image (called from p5 draw)
     loadImage: function (p) {
       if (!this.sectionImage && p) {
         this.sectionImage = p.loadImage('pic/section1.png');
       }
     },
-
 
     draw: function (p, manager, ai, progress) {
 
