@@ -1,6 +1,8 @@
 // sketch_renderer.js  — fixed to load data for histogram & scatter
 (function () {
   window.Renderer = {
+    // Store the section image for sections 0 and 1
+    sectionImage: null,
 
     // 这里改成 async，一启动就预加载两个新图需要的数据
     setData: async function (manager) {
@@ -37,8 +39,49 @@
       return manager.data;
     },
 
+    // Load the section image (called from p5 draw)
+    loadImage: function (p) {
+      if (!this.sectionImage && p) {
+        this.sectionImage = p.loadImage('pic/section1.png');
+      }
+    },
+
 
     draw: function (p, manager, ai, progress) {
+
+      // Load image if not already loaded
+      this.loadImage(p);
+
+      // SECTION 0 & 1 — Display header image
+      if (ai === 0 || ai === 1) {
+        p.background(255);
+        if (this.sectionImage && this.sectionImage.width > 0) {
+          // Calculate dimensions to fit canvas while maintaining aspect ratio
+          var imgW = this.sectionImage.width;
+          var imgH = this.sectionImage.height;
+          var canvasW = manager.canvasWidth || manager.width || 640;
+          var canvasH = manager.canvasHeight || manager.height || 480;
+          
+          // Calculate scaling to fit within canvas with some padding
+          var scale = Math.min(
+            (canvasW - 40) / imgW,
+            (canvasH - 40) / imgH
+          );
+          
+          var displayW = imgW * scale;
+          var displayH = imgH * scale;
+          var x = (canvasW - displayW) / 2;
+          var y = (canvasH - displayH) / 2;
+          
+          p.image(this.sectionImage, x, y, displayW, displayH);
+        } else {
+          // Show loading message while image loads
+          p.fill(150);
+          p.textSize(14);
+          p.text('Loading image...', 20, 30);
+        }
+        return;
+      }
 
       // SECTION 2 — Phone Addiction Boxplot（原来的，不动）
       if (ai === 2 && window.VizPhoneBoxplot) {
