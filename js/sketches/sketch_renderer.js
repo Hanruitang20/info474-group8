@@ -49,11 +49,48 @@
 
     draw: function (p, manager, ai, progress) {
 
+      // SECTION 0 — Title and group members text visualization
+      if (ai === 0) {
+        var canvasW = manager.canvasWidth || manager.width || 640;
+        var canvasH = manager.canvasHeight || manager.height || 480;
+        p.resizeCanvas(canvasW, canvasH);
+        p.background("#f7f9fc");
+        
+        var cx = canvasW / 2;
+        var cy = canvasH / 2;
+        
+        // Set font to match article (Times New Roman)
+        p.textFont("Times New Roman");
+        
+        // Title - split into multiple lines with larger font
+        p.fill("#111");
+        p.textAlign(p.CENTER, p.CENTER);
+        p.textSize(36);
+        p.textStyle(p.BOLD);
+        
+        var titleLine1 = "Scrolling Through Our Minds:";
+        var titleLine2 = "How Social Media Shapes the";
+        var titleLine3 = "Emotional World of Young Adults";
+        
+        var lineHeight = 42;
+        p.text(titleLine1, cx, cy - 70);
+        p.text(titleLine2, cx, cy - 70 + lineHeight);
+        p.text(titleLine3, cx, cy - 70 + lineHeight * 2);
+        
+        // Group members - using article font (increased spacing from title)
+        p.fill("#444");
+        p.textSize(17);
+        p.textStyle(p.NORMAL);
+        p.text("Phoebe Dong, Daphni A George, Hanrui Tang", cx, cy + 80);
+        
+        return;
+      }
+
       // Load image if not already loaded
       this.loadImage(p);
 
-      // SECTION 0 & 1 — Display header image
-      if (ai === 0 || ai === 1) {
+      // SECTION 1 — Display header image
+      if (ai === 1) {
         p.background(255);
         if (this.sectionImage && this.sectionImage.width > 0) {
           // Calculate dimensions to fit canvas while maintaining aspect ratio
