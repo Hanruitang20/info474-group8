@@ -111,12 +111,11 @@ window.VizPhoneBoxplot = {
       
         const stats = this.stats;
       
-        // More compact layout
-        const margin = { top: 60, right: 120, bottom: 50, left: 60 };
+        // Layout with improved spacing
+        const margin = { top: 70, right: 120, bottom: 60, left: 70 };
       
-        // *** SHRINK THE VERTICAL AREA ***
         const plotTop = margin.top + 50;
-        const plotBottom = p.height - margin.bottom - 85;
+        const plotBottom = p.height - margin.bottom - 70;
       
         const layoutCenter = p.width / 2;
         const axisX = layoutCenter - 140;
@@ -131,24 +130,24 @@ window.VizPhoneBoxplot = {
         p.fill("#1f2a44");
         p.textAlign(p.CENTER, p.BOTTOM);
         p.textSize(24);
-        p.text("Are Teens Too Online? Here’s the Data.", p.width / 2, margin.top - 10);
+        p.text("Are Teens Too Online? Here's the Data.", p.width / 2, margin.top - 10);
       
         p.fill("#54627a");
         p.textSize(14);
         p.text(
-          "Boxplot of total addiction scores (n = " + stats.count + " teens)",
+          "Most teens cluster at the top of the phone-addiction scale.",
           p.width / 2,
           margin.top + 15
         );
       
         // ----------------- Y-AXIS LABEL -----------------
         p.push();
-        p.translate(axisX - 45, (plotTop + plotBottom) / 2);
+        p.translate(axisX - 35, (plotTop + plotBottom) / 2);
         p.rotate(-p.HALF_PI);
         p.fill("#54627a");
-        p.textSize(13);
+        p.textSize(11);
         p.textAlign(p.CENTER, p.CENTER);
-        p.text("Total phone addiction score", 0, 0);
+        p.text("Total phone-addiction score (1–10 scale)", 0, 0);
         p.pop();
       
         // ----------------- Y-AXIS LINE -----------------
@@ -170,8 +169,19 @@ window.VizPhoneBoxplot = {
           p.text(value.toFixed(0), axisX - 12, y);
         }
       
+        // ----------------- SCALE ANNOTATIONS (separated, avoiding box plot and y-axis label) -----------------
+        p.fill("#54627a");
+        p.textSize(11);
+        p.textAlign(p.RIGHT, p.CENTER);
+        // Annotation for 10 (top of scale) - on left side to avoid box plot
+        const y10 = yFor(10);
+        p.text("10 = more addicted", axisX - 25, y10);
+        // Annotation for 1 (bottom of scale) - on left side to avoid y-axis label
+        const y1 = yFor(1);
+        p.text("1 = less addicted", axisX - 25, y1);
+      
         // ----------------- BOX PLOT -----------------
-        const boxWidth = Math.min(150, Math.max(110, p.width * 0.2));
+        const boxWidth = Math.min(160, Math.max(120, p.width * 0.22));
         const boxX1 = boxCenterX - boxWidth / 2;
         const boxX2 = boxCenterX + boxWidth / 2;
       
@@ -181,31 +191,90 @@ window.VizPhoneBoxplot = {
         const minY = yFor(stats.min);
         const maxY = yFor(stats.max);
       
-        // Whiskers
+        // Whiskers - more visible
         p.stroke("#8da2d5");
-        p.strokeWeight(3);
+        p.strokeWeight(4);
         p.line(boxCenterX, q3Y, boxCenterX, maxY);
         p.line(boxCenterX, q1Y, boxCenterX, minY);
       
-        const whiskerHalf = Math.min(46, boxWidth * 0.35);
+        const whiskerHalf = Math.min(50, boxWidth * 0.35);
         p.line(boxCenterX - whiskerHalf, maxY, boxCenterX + whiskerHalf, maxY);
         p.line(boxCenterX - whiskerHalf, minY, boxCenterX + whiskerHalf, minY);
       
-        // Box
+        // Box - more visible
         p.noStroke();
         p.fill("#dbe8ff");
         p.rect(boxX1, q3Y, boxWidth, q1Y - q3Y, 16);
+        // Add subtle border for visibility
+        p.stroke("#8da2d5");
+        p.strokeWeight(2);
+        p.noFill();
+        p.rect(boxX1, q3Y, boxWidth, q1Y - q3Y, 16);
       
-        // Median
+        // Median - more visible
         p.stroke("#3b5bdb");
-        p.strokeWeight(4);
+        p.strokeWeight(5);
         p.line(boxX1 + 8, medianY, boxX2 - 8, medianY);
       
         // Min/max dots
         p.fill("#3b5bdb");
         p.noStroke();
-        p.circle(boxCenterX, minY, 9);
-        p.circle(boxCenterX, maxY, 9);
+        p.circle(boxCenterX, minY, 10);
+        p.circle(boxCenterX, maxY, 10);
+      
+        // ----------------- ANNOTATIONS FOR MEDIAN AND Q3 -----------------
+        // Check if median and Q3 are both 10 (or very close to 10)
+        const isMedianAtMax = Math.abs(stats.median - 10) < 0.1;
+        const isQ3AtMax = Math.abs(stats.q3 - 10) < 0.1;
+        const areBothAtMax = isMedianAtMax && isQ3AtMax && Math.abs(medianY - q3Y) < 5;
+      
+        if (isMedianAtMax || isQ3AtMax) {
+          p.textAlign(p.LEFT, p.CENTER);
+          p.textSize(12);
+          p.fill("#1f2a44");
+          
+          if (areBothAtMax) {
+            // Both are at 10, show combined annotation
+            const annotationX = boxX2 + 15;
+            const annotationY = medianY;
+            p.stroke("#3b5bdb");
+            p.strokeWeight(1.5);
+            p.line(boxX2, medianY, annotationX - 5, annotationY);
+            p.noStroke();
+            p.fill("#ffffff");
+            p.rect(annotationX - 3, annotationY - 12, 110, 24, 4);
+            p.fill("#1f2a44");
+            p.text("Median & Q3 = 10", annotationX, annotationY);
+          } else {
+            // Annotation for Q3 = 10
+            if (isQ3AtMax) {
+              const annotationX = boxX2 + 15;
+              const annotationY = q3Y;
+              p.stroke("#3b5bdb");
+              p.strokeWeight(1.5);
+              p.line(boxX2, q3Y, annotationX - 5, annotationY);
+              p.noStroke();
+              p.fill("#ffffff");
+              p.rect(annotationX - 3, annotationY - 10, 70, 20, 4);
+              p.fill("#1f2a44");
+              p.text("Q3 = 10", annotationX, annotationY);
+            }
+            
+            // Annotation for Median = 10
+            if (isMedianAtMax) {
+              const annotationX = boxX2 + 15;
+              const annotationY = medianY;
+              p.stroke("#3b5bdb");
+              p.strokeWeight(1.5);
+              p.line(boxX2, medianY, annotationX - 5, annotationY);
+              p.noStroke();
+              p.fill("#ffffff");
+              p.rect(annotationX - 3, annotationY - 10, 85, 20, 4);
+              p.fill("#1f2a44");
+              p.text("Median = 10", annotationX, annotationY);
+            }
+          }
+        }
       
         // ----------------- STATS CALLOUT -----------------
         const statX = p.width - margin.right + 10;
@@ -241,7 +310,7 @@ window.VizPhoneBoxplot = {
         p.textSize(13);
 
         const annotationWidth = p.width - margin.left - margin.right;
-        p.text(annotation, margin.left, plotBottom + 50, annotationWidth, 60);
+        p.text(annotation, margin.left, plotBottom + 40, annotationWidth, 50);
       }      
   };
   

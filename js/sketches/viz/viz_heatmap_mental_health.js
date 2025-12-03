@@ -293,6 +293,27 @@
                 p.line(legendX + i, legendY, legendX + i, legendY + legendHeight);
             }
 
+            // Draw indicator on legend when hovering
+            if (hovered && hovered.v != null) {
+                const hoveredValue = hovered.v;
+                const normalizedValue = (hoveredValue - minVal) / (maxVal - minVal);
+                const indicatorX = legendX + normalizedValue * legendWidth;
+                
+                // Draw a vertical line indicator
+                p.stroke(34); // #222
+                p.strokeWeight(2.5);
+                p.line(indicatorX, legendY - 3, indicatorX, legendY + legendHeight + 3);
+                
+                // Draw a small triangle pointer
+                p.fill(34);
+                p.noStroke();
+                p.triangle(
+                    indicatorX, legendY - 3,
+                    indicatorX - 5, legendY - 8,
+                    indicatorX + 5, legendY - 8
+                );
+            }
+
             p.noStroke();
             p.fill(85); // #555
             p.textSize(11.5);

@@ -7,7 +7,8 @@ window.VizGroupedBar = {
   loading: false,
   error: null,
   selectedIndicator: null,
-  dropdown: null,
+  optionButtons: [],
+  prevMousePressed: false,
 
   INDICATORS: [
     {
@@ -142,12 +143,17 @@ window.VizGroupedBar = {
     return result;
   },
 
+  handleOptionClick(indicatorKey) {
+    if (indicatorKey !== this.selectedIndicator) {
+      this.selectedIndicator = indicatorKey;
+      this.groupedData = this.computeGroupedData(this.selectedIndicator);
+    }
+  },
+
   draw(p, manager, ai) {
     if (ai !== 7) {
-      // Hide dropdown when not in this section
-      if (this.dropdown) {
-        this.dropdown.style('display', 'none');
-      }
+      // Reset mouse state when not in this section
+      this.prevMousePressed = false;
       return;
     }
 
@@ -157,7 +163,8 @@ window.VizGroupedBar = {
     }
 
     const canvasW = (manager && manager.canvasWidth) || (manager && manager.width) || 700;
-    const canvasH = (manager && manager.canvasHeight) || (manager && manager.height) || 520;
+    // Increase canvas height to accommodate buttons below the chart
+    const canvasH = (manager && manager.canvasHeight) || (manager && manager.height) || 600;
     p.resizeCanvas(canvasW, canvasH);
     p.background("#f7f9fc");
 
@@ -177,39 +184,15 @@ window.VizGroupedBar = {
       return;
     }
 
-    // Create dropdown if it doesn't exist
-    if (!this.dropdown) {
-      this.dropdown = p.createSelect();
-      this.INDICATORS.forEach(ind => {
-        this.dropdown.option(ind.label, ind.key);
-      });
-      this.dropdown.changed(() => {
-        this.selectedIndicator = this.dropdown.value();
-        this.groupedData = this.computeGroupedData(this.selectedIndicator);
-      });
-      this.dropdown.style('position', 'absolute');
-      this.dropdown.style('z-index', '1000');
-      this.dropdown.style('font-size', '13px');
-      this.dropdown.style('padding', '6px 10px');
-      this.dropdown.style('width', '180px');
-    }
-
     // Get current indicator label
     const currentInd = this.INDICATORS.find(ind => ind.key === this.selectedIndicator);
     const indicatorLabel = currentInd ? currentInd.label : "Emotional Difficulty";
 
-    const margin = { top: 90, right: 60, bottom: 80, left: 100 };
+    const margin = { top: 90, right: 60, bottom: 140, left: 100 }; // Increased bottom margin for buttons
     const plotW = canvasW - margin.left - margin.right;
     const plotH = canvasH - margin.top - margin.bottom;
     const plotX = margin.left;
     const plotY = margin.top;
-
-    // Position dropdown below the subtitle (absolute position relative to canvas)
-    const canvasRect = p.canvas.getBoundingClientRect();
-    const dropdownX = canvasW - 220;
-    const dropdownY = margin.top - 15; // Position just below subtitle
-    this.dropdown.style('display', 'block');
-    this.dropdown.position(canvasRect.left + window.scrollX + dropdownX, canvasRect.top + window.scrollY + dropdownY);
 
     const ageRanges = ["16-19", "20-22", "23-25", "26-29"];
     const genders = ["Female", "Male"];
@@ -237,12 +220,6 @@ window.VizGroupedBar = {
     p.fill("#54627a");
     p.textSize(13);
     p.text(`Average '${indicatorLabel}' score (1 = least, 5 = most)`, canvasW / 2, margin.top - 28);
-    
-    // Dropdown label
-    p.fill("#54627a");
-    p.textSize(12);
-    p.textAlign(p.RIGHT, p.CENTER);
-    p.text("Select indicator:", dropdownX - 10, dropdownY + 12);
 
     // Y-axis
     p.stroke("#bcc6dd");
@@ -314,6 +291,72 @@ window.VizGroupedBar = {
     p.textSize(12);
     p.textAlign(p.CENTER, p.TOP);
     p.text("Age Range", canvasW / 2, plotY + plotH + 35);
+
+    // "Select indicator" label - positioned below "Age Range"
+    p.textAlign(p.CENTER, p.TOP);
+    p.textSize(11);
+    p.fill("#54627a");
+    p.text("Select indicator:", canvasW / 2, plotY + plotH + 55);
+
+    // Draw clickable option buttons - positioned horizontally below the labels
+    const optionsY = plotY + plotH + 75; // Further down, below "Select indicator" label
+    const optionHeight = 28;
+    const optionWidth = 140;
+    const optionSpacing = 8;
+    const totalButtonsWidth = this.INDICATORS.length * optionWidth + (this.INDICATORS.length - 1) * optionSpacing;
+    const optionsStartX = plotX + (plotW - totalButtonsWidth) / 2; // Center the buttons
+    
+    // Check for mouse clicks on option buttons (only on click, not while held)
+    const justClicked = p.mouseIsPressed && !this.prevMousePressed && p.mouseButton === p.LEFT;
+    if (justClicked) {
+      this.INDICATORS.forEach((ind, idx) => {
+        const optionX = optionsStartX + idx * (optionWidth + optionSpacing);
+        if (p.mouseX >= optionX && p.mouseX <= optionX + optionWidth &&
+            p.mouseY >= optionsY && p.mouseY <= optionsY + optionHeight) {
+          this.handleOptionClick(ind.key);
+        }
+      });
+    }
+    this.prevMousePressed = p.mouseIsPressed;
+    
+    let isHovering = false;
+    this.INDICATORS.forEach((ind, idx) => {
+      const optionX = optionsStartX + idx * (optionWidth + optionSpacing);
+      const isSelected = ind.key === this.selectedIndicator;
+      const isHover = p.mouseX >= optionX && p.mouseX <= optionX + optionWidth &&
+                      p.mouseY >= optionsY && p.mouseY <= optionsY + optionHeight;
+      
+      if (isHover) isHovering = true;
+      
+      // Button background
+      if (isSelected) {
+        p.fill(76, 110, 245, 200); // Selected: blue with transparency
+        p.stroke(76, 110, 245);
+        p.strokeWeight(2);
+      } else if (isHover) {
+        p.fill(240, 240, 240);
+        p.stroke(150, 150, 150);
+        p.strokeWeight(1.5);
+      } else {
+        p.fill(255, 255, 255);
+        p.stroke(200, 200, 200);
+        p.strokeWeight(1);
+      }
+      p.rect(optionX, optionsY, optionWidth, optionHeight, 6);
+      
+      // Button text
+      p.fill(isSelected ? 255 : 60);
+      p.textSize(11);
+      p.textAlign(p.CENTER, p.CENTER);
+      p.text(ind.label, optionX + optionWidth / 2, optionsY + optionHeight / 2);
+    });
+    
+    // Set cursor based on hover state
+    if (isHovering) {
+      p.cursor(p.HAND);
+    } else {
+      p.cursor(p.ARROW);
+    }
 
     // Legend
     const legendX = canvasW - margin.right - 20;
