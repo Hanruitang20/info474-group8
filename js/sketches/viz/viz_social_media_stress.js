@@ -1,4 +1,3 @@
-
 console.log("=== viz_social_media_stress.js LOADED ===");
 
 (function () {
@@ -9,7 +8,6 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         {
             name: "Usage & Behavior",
             factors: [
-                { key: '8. What is the average time you spend on social media every day?', label: 'Usage' },
                 { key: '9. How often do you find yourself using Social media without a specific purpose?', label: 'Mindless Use' },
                 { key: '10. How often do you get distracted by Social media when you are busy doing something?', label: 'Distraction' }
             ]
@@ -133,7 +131,7 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         const h = p.height;
 
         p.background(245);
-        
+
         // Set font to match article
         p.textFont("Times New Roman");
 

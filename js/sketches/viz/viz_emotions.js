@@ -2,7 +2,7 @@
 window.VizEmotions = (function () {
     let table = null;
     let ready = false;
-    let selectedPlatform = "All";
+    let selectedPlatform = "";
     let platforms = [];
     let dropdown = null;
     let ageSlider = null;
@@ -36,7 +36,7 @@ window.VizEmotions = (function () {
         if (!table) {
             table = p.loadTable("data/emotional_well_being.csv", "csv", "header", () => {
                 ready = true;
-                platforms = ["All"];
+                platforms = [];
                 let ages = [];
                 for (let i = 0; i < table.getRowCount(); i++) {
                     const plat = table.getString(i, "Platform").trim();
@@ -106,6 +106,8 @@ window.VizEmotions = (function () {
         if (!dropdown) {
             dropdown = p.createSelect();
             platforms.forEach(pl => dropdown.option(pl));
+            dropdown.selected(platforms[0]);
+            selectedPlatform = platforms[0];
             dropdown.changed(() => { selectedPlatform = dropdown.value(); });
             dropdown.style('position', 'absolute');
             dropdown.style('z-index', '1000');
@@ -134,7 +136,7 @@ window.VizEmotions = (function () {
             const row = table.getRow(i);
             const plat = row.get("Platform").trim();
             const age = parseInt(row.get("Age"));
-            if ((selectedPlatform === "All" || plat === selectedPlatform) && age <= maxAgeSelected) {
+            if (plat === selectedPlatform && age <= maxAgeSelected) {
                 filteredRows.push(row);
             }
         }
@@ -184,12 +186,12 @@ window.VizEmotions = (function () {
         const spacing = metricsAreaW / metrics.length;
         const metricsStartX = cardX + imgPadding + metricsPadding;
         const metricsY = panelY + 28;
-        
+
         p.textAlign(p.CENTER, p.CENTER);
 
         for (let i = 0; i < metrics.length; i++) {
             const iconX = metricsStartX + i * spacing + spacing / 2;
-            
+
             // Icon (reduced size)
             const scale = p.map(avgValues[i], 0, maxMetric, 24, 36);
             p.textSize(scale);
@@ -230,36 +232,9 @@ window.VizEmotions = (function () {
         p.fill(60);
         p.text(`Dominant Emotion: ${dominantEmotion}`, cardX + cardW / 2, infoY);
         p.text(`Average Engagement per User: ${avgEngagement}`, cardX + cardW / 2, infoY + 20);
+        p.text(`Age Filter: Up to ${maxAgeSelected}`, cardX + cardW / 2, infoY + 40);
 
-        // Draw slider labels AFTER everything else (so they're on top)
-        // Positioned with proper margin to avoid overlap with slider handle
-        if (ageSlider && ageSlider.style('display') === 'block') {
-            const sliderW = sliderWidth;
 
-            // Convert absolute positions back to canvas coordinates for drawing
-            const sliderXOnCanvas = sliderX;
-            const sliderYOnCanvas = controlsY + 25;
-            const labelYOffset = 30; // Increased spacing below slider to avoid handle overlap
-
-            p.fill(80);
-            p.textSize(11);
-            p.textAlign(p.LEFT, p.TOP);
-            // Position "Age: X" label with margin to avoid overlap
-            p.text(`Age: ${minAge}`, sliderXOnCanvas, sliderYOnCanvas + labelYOffset);
-
-            p.textAlign(p.RIGHT, p.TOP);
-            // Position max age label with margin
-            p.text(`${maxAge}`, sliderXOnCanvas + sliderW, sliderYOnCanvas + labelYOffset);
-
-            // Current value label positioned above slider with safe margin
-            p.textAlign(p.CENTER, p.BOTTOM);
-            const currentVal = ageSlider.value();
-            const thumbX = sliderXOnCanvas + (currentVal - minAge) / (maxAge - minAge) * sliderW;
-            p.fill(40);
-            p.textSize(12);
-            // Position above slider track with safe margin (8px above)
-            p.text(currentVal, thumbX, sliderYOnCanvas - 8);
-        }
     }
 
     return { draw };
