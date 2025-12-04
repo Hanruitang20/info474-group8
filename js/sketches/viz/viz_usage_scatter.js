@@ -94,7 +94,7 @@
       p.textSize(15);
       p.textStyle(p.NORMAL);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Daily Social Media Usage vs. Mental Health Scores (Higher Score = More Distress)", manager.width / 2, 10);
+      p.text("Daily Social Media Usage vs. Mental Health Scores (Higher Score = Less Distress)", manager.width / 2, 10);
 
       // Chart area - increased spacing from title
       const chartX = 60;
@@ -213,7 +213,7 @@
       p.fill(90);
       p.textSize(11);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Mental Health Score Scale: Higher scores = worse emotional well-being (more distress)",
+      p.text("Mental Health Score Scale: Higher scores = better emotional well-being (less distress)",
         chartX + chartW / 2,
         chartY + chartH + 50
     );
