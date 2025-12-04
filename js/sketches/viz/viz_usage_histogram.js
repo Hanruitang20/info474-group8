@@ -84,25 +84,25 @@
         }
       }
 
-      // Plot title - increased by ~25-30%
+      // Plot title - large, centered
       p.fill(34);
-      p.textSize(15);
+      p.textSize(22);
       p.textStyle(p.NORMAL);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Daily Usage: How Much Time Do We Spend?", manager.width / 2, 5);
+      p.text("Daily Social Media Usage Distribution", manager.width / 2, 10);
 
       // Subtitle/caption - not bold, informative but subtle
       p.fill(100);
       p.textSize(12);
       p.textStyle(p.NORMAL);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Daily social media usage distribution among young adults", manager.width / 2, 25);
+      p.text("Daily social media usage distribution among young adults", manager.width / 2, 38);
 
-      // Chart area
+      // Chart area - increased spacing from title
       const chartX = 60;
-      const chartY = 50;
+      const chartY = 60;
       const chartW = manager.width - 100;
-      const chartH = manager.height - 140;
+      const chartH = manager.height - 150;
       const barW = chartW / binCount;
 
       // Draw gridlines
@@ -134,24 +134,24 @@
         p.noStroke();
         p.rect(x, y, barW - 2, barH);
 
-        // Bin label - evenly spaced under each bar
+        // Bin label - evenly spaced under each bar with proper spacing
         p.fill(60);
         p.textSize(9);
         p.textAlign(p.CENTER, p.TOP);
         const label = i === binCount - 1 
           ? `${i}+`
           : `${i}-${i + 1}`;
-        p.text(label, x + barW / 2, chartY + chartH + 5);
+        p.text(label, x + barW / 2, chartY + chartH + 8);
       }
 
-      // Y-axis labels
+      // Y-axis labels - with proper spacing from axis
       p.fill(85);
       p.textSize(10);
       p.textAlign(p.RIGHT, p.CENTER);
       for (let i = 0; i <= 5; i++) {
         const y = chartY + (chartH / 5) * (5 - i);
         const value = Math.round((maxCount / 5) * i);
-        p.text(value.toString(), chartX - 8, y);
+        p.text(value.toString(), chartX - 12, y);
       }
 
       // Axes
@@ -165,7 +165,7 @@
       p.textSize(12);
       p.textStyle(p.NORMAL);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Daily Social Media Usage (hrs/day)", chartX + chartW / 2, chartY + chartH + 25);
+      p.text("Daily Social Media Usage (hrs/day)", chartX + chartW / 2, chartY + chartH + 28);
 
       p.push();
       p.translate(chartX - 35, chartY + chartH / 2);
@@ -175,12 +175,12 @@
       p.text("Number of Students", 0, 0);
       p.pop();
 
-      // Bottom annotation - reinforcing the insight
+      // Bottom annotation - reinforcing the insight (spaced below x-axis label)
       p.fill(60);
       p.textSize(13);
       p.textStyle(p.NORMAL);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Higher daily usage increases exposure to emotionally stressful content.", manager.width / 2, chartY + chartH + 50);
+      p.text("Higher daily usage increases exposure to emotionally stressful content.", manager.width / 2, chartY + chartH + 55);
 
       // Hover tooltip
       if (this.hoverBin && this.hoverBin.count > 0) {

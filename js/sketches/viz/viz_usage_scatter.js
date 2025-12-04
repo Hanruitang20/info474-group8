@@ -89,11 +89,18 @@
         return;
       }
 
-      // Chart area
+      // Plot title - large, centered
+      p.fill(34);
+      p.textSize(15);
+      p.textStyle(p.NORMAL);
+      p.textAlign(p.CENTER, p.TOP);
+      p.text("Daily Social Media Usage vs. Mental Health Scores (Higher Score = More Distress)", manager.width / 2, 10);
+
+      // Chart area - increased spacing from title
       const chartX = 60;
-      const chartY = 40;
+      const chartY = 55;
       const chartW = manager.width - 100;
-      const chartH = manager.height - 100;
+      const chartH = manager.height - 125;
 
       // Data ranges
       const xs = this.data.map(d => d.usage);
@@ -126,7 +133,7 @@
         const px2 = chartX + p.map(x2, xMin, xMax, 0, chartW);
         const py2 = chartY + chartH - p.map(y2, yMin, yMax, 0, chartH);
 
-        p.stroke(255, 100, 100);
+        p.stroke(31, 119, 180); // Blue (#1f77b4)
         p.strokeWeight(2);
         p.line(px1, py1, px2, py2);
       }
@@ -149,9 +156,9 @@
         const dist = p.dist(p.mouseX, p.mouseY, px, py);
         if (dist < 8) {
           this.hoverPoint = { x: px, y: py, usage: d.usage, mh: d.mh };
-          p.fill(255, 80, 80); // Red on hover
+          p.fill(214, 51, 108, 220); // Brighter deep pink on hover
         } else {
-          p.fill(80, 120, 200, 180); // Consistent blue
+          p.fill(214, 51, 108, 180); // Deep pink (#d6336c)
         }
 
         p.circle(px, py, 7);
@@ -163,7 +170,7 @@
       p.line(chartX, chartY, chartX, chartY + chartH);
       p.line(chartX, chartY + chartH, chartX + chartW, chartY + chartH);
 
-      // X-axis ticks and labels
+      // X-axis ticks and labels - with proper spacing
       p.fill(85);
       p.textSize(10);
       p.textAlign(p.CENTER, p.TOP);
@@ -174,10 +181,10 @@
         p.strokeWeight(1);
         p.line(x, chartY + chartH - 3, x, chartY + chartH + 3);
         p.noStroke();
-        p.text(value.toFixed(1), x, chartY + chartH + 8);
+        p.text(value.toFixed(1), x, chartY + chartH + 10);
       }
 
-      // Y-axis ticks and labels - integers only
+      // Y-axis ticks and labels - integers only, with proper spacing
       p.textAlign(p.RIGHT, p.CENTER);
       for (let i = 0; i <= 5; i++) {
         const y = chartY + (chartH / 5) * (5 - i);
@@ -186,14 +193,14 @@
         p.strokeWeight(1);
         p.line(chartX - 3, y, chartX + 3, y);
         p.noStroke();
-        p.text(value.toString(), chartX - 8, y);
+        p.text(value.toString(), chartX - 12, y);
       }
 
       // Axis labels
       p.fill(34);
       p.textSize(12);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Daily Social Media Usage (hrs/day)", chartX + chartW / 2, chartY + chartH + 25);
+      p.text("Daily Social Media Usage (hrs/day)", chartX + chartW / 2, chartY + chartH + 28);
 
       p.push();
       p.translate(chartX - 35, chartY + chartH / 2);
@@ -202,13 +209,13 @@
       p.text("Mental Health Score", 0, 0);
       p.pop();
 
-      // >>> NEW: Mental Health scale explanation <<<
+      // Mental Health scale explanation - spaced properly
       p.fill(90);
       p.textSize(11);
       p.textAlign(p.CENTER, p.TOP);
       p.text("Mental Health Score Scale: Higher scores = worse emotional well-being (more distress)",
         chartX + chartW / 2,
-        chartY + chartH + 42
+        chartY + chartH + 50
     );
 
       // Hover tooltip
