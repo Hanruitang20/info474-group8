@@ -76,11 +76,33 @@
 
       const maxCount = Math.max(...bins);
 
+      // Find tallest bar for annotation placement
+      let maxBinIndex = 0;
+      for (let i = 0; i < binCount; i++) {
+        if (bins[i] > bins[maxBinIndex]) {
+          maxBinIndex = i;
+        }
+      }
+
+      // Plot title - increased by ~25-30%
+      p.fill(34);
+      p.textSize(15);
+      p.textStyle(p.NORMAL);
+      p.textAlign(p.CENTER, p.TOP);
+      p.text("Daily Usage: How Much Time Do We Spend?", manager.width / 2, 5);
+
+      // Subtitle/caption - not bold, informative but subtle
+      p.fill(100);
+      p.textSize(12);
+      p.textStyle(p.NORMAL);
+      p.textAlign(p.CENTER, p.TOP);
+      p.text("Daily social media usage distribution among young adults", manager.width / 2, 25);
+
       // Chart area
       const chartX = 60;
-      const chartY = 40;
+      const chartY = 50;
       const chartW = manager.width - 100;
-      const chartH = manager.height - 100;
+      const chartH = manager.height - 140;
       const barW = chartW / binCount;
 
       // Draw gridlines
@@ -152,6 +174,13 @@
       p.textStyle(p.NORMAL);
       p.text("Number of Students", 0, 0);
       p.pop();
+
+      // Bottom annotation - reinforcing the insight
+      p.fill(60);
+      p.textSize(13);
+      p.textStyle(p.NORMAL);
+      p.textAlign(p.CENTER, p.TOP);
+      p.text("Higher daily usage increases exposure to emotionally stressful content.", manager.width / 2, chartY + chartH + 50);
 
       // Hover tooltip
       if (this.hoverBin && this.hoverBin.count > 0) {
