@@ -3,6 +3,8 @@
   window.Renderer = {
     // Store the section image for sections 0 and 1
     sectionImage: null,
+    // Store the section image for section 9
+    sectionImage9: null,
 
     // 这里改成 async，一启动就预加载两个新图需要的数据
     setData: async function (manager) {
@@ -44,6 +46,13 @@
     loadImage: function (p) {
       if (!this.sectionImage && p) {
         this.sectionImage = p.loadImage('pic/section1.png');
+      }
+    },
+
+    // Load the section 9 image (called from p5 draw)
+    loadImage9: function (p) {
+      if (!this.sectionImage9 && p) {
+        this.sectionImage9 = p.loadImage('pic/picture2.png');
       }
     },
 
@@ -172,6 +181,40 @@
         } else {
           console.log("=== StressDashboardViz NOT FOUND ===");
         }
+      }
+
+      // Load image if not already loaded
+      this.loadImage9(p);
+
+      // SECTION 9 — Display picture2.png
+      if (ai === 9) {
+        p.background(255);
+        if (this.sectionImage9 && this.sectionImage9.width > 0) {
+          // Calculate dimensions to fit canvas while maintaining aspect ratio
+          var imgW = this.sectionImage9.width;
+          var imgH = this.sectionImage9.height;
+          var canvasW = manager.canvasWidth || manager.width || 640;
+          var canvasH = manager.canvasHeight || manager.height || 480;
+          
+          // Calculate scaling to fit within canvas with some padding
+          var scale = Math.min(
+            (canvasW - 40) / imgW,
+            (canvasH - 40) / imgH
+          );
+          
+          var displayW = imgW * scale;
+          var displayH = imgH * scale;
+          var x = (canvasW - displayW) / 2;
+          var y = (canvasH - displayH) / 2;
+          
+          p.image(this.sectionImage9, x, y, displayW, displayH);
+        } else {
+          // Show loading message while image loads
+          p.fill(150);
+          p.textSize(14);
+          p.text('Loading image...', 20, 30);
+        }
+        return;
       }
 
       // fallback: clear canvas
