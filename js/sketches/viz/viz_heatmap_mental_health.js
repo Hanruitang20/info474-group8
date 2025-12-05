@@ -75,7 +75,7 @@
             p.resizeCanvas(canvasW, canvasH);
 
             p.push();
-            p.background("#fefefe"); // Clean white background
+            p.background("#f7f9fc"); // Consistent background color
             
             // Set font to match article
             p.textFont("Times New Roman");
@@ -211,6 +211,37 @@
             });
 
             /* -------------------------
+               FIND MIN/MAX VALUES
+            -------------------------- */
+            let allValues = [];
+            let allCells = [];
+            
+            INDICATORS.forEach((ind, c) => {
+                PLATFORMS.forEach((plat, r) => {
+                    let v = data[plat][ind.key];
+                    if (v != null && !isNaN(v)) {
+                        allValues.push(v);
+                        allCells.push({
+                            value: v,
+                            x: LEFT + c * (CELL + GAP),
+                            y: TOP + r * (CELL + GAP),
+                            platform: plat,
+                            indicator: ind.key
+                        });
+                    }
+                });
+            });
+            
+            const actualMin = allValues.length > 0 ? Math.min(...allValues) : minVal;
+            const actualMax = allValues.length > 0 ? Math.max(...allValues) : maxVal;
+            
+            // Find first cell with min value (healthiest)
+            const minCell = allCells.find(cell => Math.abs(cell.value - actualMin) < 0.001) || null;
+            
+            // Find first cell with max value (unhealthiest)
+            const maxCell = allCells.find(cell => Math.abs(cell.value - actualMax) < 0.001) || null;
+
+            /* -------------------------
                HEATMAP + HOVER
             -------------------------- */
             let hovered = null;
@@ -228,7 +259,13 @@
                         p.mouseY >= y &&
                         p.mouseY <= y + CELL;
 
-                    if (isHover) hovered = { x, y, v };
+                    // Check if this is the min or max cell (based on value only)
+                    const isMin = v != null && !isNaN(v) && Math.abs(v - actualMin) < 0.001;
+                    const isMax = v != null && !isNaN(v) && Math.abs(v - actualMax) < 0.001;
+
+                    if (isHover) {
+                        hovered = { x, y, v, isMin, isMax };
+                    }
 
                     p.fill(...heatColor(v, minVal, maxVal));
                     p.noStroke();
@@ -236,8 +273,14 @@
 
                     if (isHover) {
                         p.noFill();
-                        p.stroke(34); // #222
-                        p.strokeWeight(2.5);
+                        if (isMin || isMax) {
+                            // Enhanced border for healthiest/unhealthiest
+                            p.stroke(68, 85, 102); // Dark grey
+                            p.strokeWeight(3);
+                        } else {
+                            p.stroke(34); // #222
+                            p.strokeWeight(2.5);
+                        }
                         p.rect(x, y, CELL, CELL, CELL * 0.2);
                     }
                 });
@@ -245,10 +288,24 @@
 
             if (hovered) {
                 let textContent = `${hovered.v.toFixed(2)}`;
+                
+                // Add note if this is healthiest or unhealthiest
+                let noteText = "";
+                if (hovered.isMin) {
+                    noteText = "(healthiest)";
+                } else if (hovered.isMax) {
+                    noteText = "(unhealthiest)";
+                }
 
                 const padding = 10;
-                const tw = p.textWidth(textContent) + padding * 2;
-                const th = 32;
+                const lineHeight = 16;
+                
+                // Calculate tooltip dimensions based on whether we have a note
+                const scoreWidth = p.textWidth(textContent);
+                const noteWidth = noteText ? p.textWidth(noteText) : 0;
+                const maxTextWidth = Math.max(scoreWidth, noteWidth);
+                const tw = maxTextWidth + padding * 2;
+                const th = noteText ? 48 : 32; // Taller if we have a note
 
                 let tx = hovered.x + CELL + 12;
                 let ty = hovered.y;
@@ -271,7 +328,19 @@
                 p.fill(34); // #222
                 p.textAlign(p.LEFT, p.CENTER);
                 p.textSize(13);
-                p.text(textContent, tx + padding, ty + th / 2);
+                
+                if (noteText) {
+                    // Score on first line
+                    p.text(textContent, tx + padding, ty + th / 2 - lineHeight / 2);
+                    
+                    // Note on second line (smaller, slightly lighter)
+                    p.fill(85); // #555 - slightly lighter
+                    p.textSize(11);
+                    p.text(noteText, tx + padding, ty + th / 2 + lineHeight / 2);
+                } else {
+                    // Just the score centered
+                    p.text(textContent, tx + padding, ty + th / 2);
+                }
             }
 
             /* -------------------------
@@ -317,24 +386,18 @@
                 );
             }
 
+            // Simplified legend labels - positioned under the legend bar
             p.noStroke();
             p.fill(85); // #555
-            p.textSize(11.5);
-
-            p.textAlign(p.CENTER, p.BOTTOM);
-            p.text(
-                "Emotional Well-Being Scale (1 = healthier, 5 = more strain)",
-                CANVAS_W / 2,
-                legendY - 12
-            );
-
-            p.fill(102); // #666
-            p.textSize(10.5);
+            p.textSize(11);
+            
+            const labelY = legendY + legendHeight + 8; // Position labels 8px below the legend bar
+            
             p.textAlign(p.LEFT, p.TOP);
-            p.text("cooler = better well-being", legendX, legendY + legendHeight + 4);
-
+            p.text("Healthier", legendX, labelY);
+            
             p.textAlign(p.RIGHT, p.TOP);
-            p.text("warmer = more emotional strain", legendX + legendWidth, legendY + legendHeight + 4);
+            p.text("More Strain", legendX + legendWidth, labelY);
             
             // Annotation callout on the right side
             const noteX = legendX + legendWidth + 50;
