@@ -33,7 +33,7 @@ function startP5() {
             };
 
             p.draw = function () {
-                p.background(255);
+                p.background("#f7f9fc"); // Consistent background color - individual visualizations will override if needed
                 self.draw(p);
             };
         };

@@ -1,6 +1,7 @@
-window.VizPhoneBoxplot = {
+ window.VizPhoneBoxplot = {
     values: null,
     stats: null,
+    sampleInfo: null,
     loadingPromise: null,
     error: null,
   
@@ -25,16 +26,23 @@ window.VizPhoneBoxplot = {
           /addiction.*level/i.test(h) ||
           /addiction/i.test(h)
         );
+        
+        const ageIdx = headers.findIndex(h => /^age$/i.test(h.trim()));
   
         if (scoreIdx === -1) {
           throw new Error("Could not find a total phone addiction score column.");
         }
   
+        const ages = [];
         this.values = rows
           .slice(1)
           .map(row => {
             const cols = row.split(",");
             const val = parseFloat((cols[scoreIdx] || "").trim());
+            if (ageIdx !== -1) {
+              const age = parseFloat((cols[ageIdx] || "").trim());
+              if (!isNaN(age)) ages.push(age);
+            }
             return isNaN(val) ? null : val;
           })
           .filter(v => v !== null);
@@ -44,6 +52,24 @@ window.VizPhoneBoxplot = {
         }
   
         this.stats = this.computeStats(this.values);
+        
+        // Extract sample info
+        if (ages.length > 0) {
+          const sortedAges = ages.sort((a, b) => a - b);
+          this.sampleInfo = {
+            n: this.values.length,
+            ageMin: sortedAges[0],
+            ageMax: sortedAges[sortedAges.length - 1],
+            datasetName: "teen phone addiction dataset"
+          };
+        } else {
+          this.sampleInfo = {
+            n: this.values.length,
+            ageMin: null,
+            ageMax: null,
+            datasetName: "teen phone addiction dataset"
+          };
+        }
       })().catch(err => {
         console.error("VizPhoneBoxplot:", err);
         this.error = err.message || "Unable to render the boxplot.";
@@ -113,9 +139,10 @@ window.VizPhoneBoxplot = {
         }
       
         const stats = this.stats;
+        const sampleInfo = this.sampleInfo || { n: stats.count, ageMin: null, ageMax: null, datasetName: "teen phone addiction dataset" };
       
-        // Layout with improved spacing
-        const margin = { top: 70, right: 120, bottom: 60, left: 70 };
+        // Layout with improved spacing - increased right margin for labels further from boxplot
+        const margin = { top: 90, right: 120, bottom: 60, left: 70 };
       
         const plotTop = margin.top + 50;
         const plotBottom = p.height - margin.bottom - 70;
@@ -124,8 +151,8 @@ window.VizPhoneBoxplot = {
         const axisX = layoutCenter - 140;
         const boxCenterX = layoutCenter + 40;
       
-        // Score range
-        const axisMin = 0;
+        // Score range - start at 1, not 0
+        const axisMin = 1;
         const axisMax = 10;
         const yFor = val => p.map(val, axisMin, axisMax, plotBottom, plotTop);
       
@@ -133,9 +160,18 @@ window.VizPhoneBoxplot = {
         p.fill("#1f2a44");
         p.textAlign(p.CENTER, p.BOTTOM);
         p.textSize(24);
-        p.text("Are Teens Too Online? Here's the Data.", p.width / 2, margin.top - 10);
+        p.text("Are Teens Too Online? Here's the Data.", p.width / 2, margin.top - 30);
       
+        // Sample info under title
         p.fill("#54627a");
+        p.textSize(12);
+        let sampleText = `N = ${sampleInfo.n} teens`;
+        if (sampleInfo.ageMin !== null && sampleInfo.ageMax !== null) {
+          sampleText += `, ages ${sampleInfo.ageMin}–${sampleInfo.ageMax}`;
+        }
+        sampleText += `, from ${sampleInfo.datasetName}`;
+        p.text(sampleText, p.width / 2, margin.top - 10);
+      
         p.textSize(14);
         p.text(
           "Most teens cluster at the top of the phone-addiction scale.",
@@ -159,7 +195,8 @@ window.VizPhoneBoxplot = {
         p.line(axisX, plotTop, axisX, plotBottom);
       
         // ----------------- TICKS + LABELS -----------------
-        for (let value = axisMin; value <= axisMax; value += 2) {
+        // Start from 2 to avoid showing 0 tick (since axisMin is now 1)
+        for (let value = 2; value <= axisMax; value += 2) {
           const y = yFor(value);
       
           p.stroke("#96a2c2");
@@ -172,19 +209,21 @@ window.VizPhoneBoxplot = {
           p.text(value.toFixed(0), axisX - 12, y);
         }
       
-        // ----------------- SCALE ANNOTATIONS (separated, avoiding box plot and y-axis label) -----------------
-        p.fill("#54627a");
-        p.textSize(11);
+        // Add tick for 1 at the bottom
+        const y1Tick = yFor(1);
+        p.stroke("#96a2c2");
+        p.line(axisX - 6, y1Tick, axisX + 6, y1Tick);
+        p.noStroke();
+        p.fill("#4b5670");
+        p.textSize(12);
         p.textAlign(p.RIGHT, p.CENTER);
-        // Annotation for 10 (top of scale) - on left side to avoid box plot
-        const y10 = yFor(10);
-        p.text("10 = more addicted", axisX - 25, y10);
-        // Annotation for 1 (bottom of scale) - on left side to avoid y-axis label
-        const y1 = yFor(1);
-        p.text("1 = less addicted", axisX - 25, y1);
+        p.text("1", axisX - 12, y1Tick);
+      
+        // Scale annotations removed to avoid overlap with integrated markers
       
         // ----------------- BOX PLOT -----------------
-        const boxWidth = Math.min(160, Math.max(120, p.width * 0.22));
+        // Reduced box width to only span Q1-Q3 range (narrower, not stretched)
+        const boxWidth = Math.min(100, Math.max(80, p.width * 0.14));
         const boxX1 = boxCenterX - boxWidth / 2;
         const boxX2 = boxCenterX + boxWidth / 2;
       
@@ -200,24 +239,24 @@ window.VizPhoneBoxplot = {
         p.line(boxCenterX, q3Y, boxCenterX, maxY);
         p.line(boxCenterX, q1Y, boxCenterX, minY);
       
-        const whiskerHalf = Math.min(50, boxWidth * 0.35);
+        const whiskerHalf = Math.min(40, boxWidth * 0.4);
         p.line(boxCenterX - whiskerHalf, maxY, boxCenterX + whiskerHalf, maxY);
         p.line(boxCenterX - whiskerHalf, minY, boxCenterX + whiskerHalf, minY);
       
-        // Box - more visible
+        // Box - spans only Q1 to Q3
         p.noStroke();
         p.fill("#dbe8ff");
-        p.rect(boxX1, q3Y, boxWidth, q1Y - q3Y, 16);
+        p.rect(boxX1, q3Y, boxWidth, q1Y - q3Y, 12);
         // Add subtle border for visibility
         p.stroke("#8da2d5");
         p.strokeWeight(2);
         p.noFill();
-        p.rect(boxX1, q3Y, boxWidth, q1Y - q3Y, 16);
+        p.rect(boxX1, q3Y, boxWidth, q1Y - q3Y, 12);
       
         // Median - more visible
         p.stroke("#3b5bdb");
         p.strokeWeight(5);
-        p.line(boxX1 + 8, medianY, boxX2 - 8, medianY);
+        p.line(boxX1 + 6, medianY, boxX2 - 6, medianY);
       
         // Min/max dots
         p.fill("#3b5bdb");
@@ -225,87 +264,130 @@ window.VizPhoneBoxplot = {
         p.circle(boxCenterX, minY, 10);
         p.circle(boxCenterX, maxY, 10);
       
-        // ----------------- ANNOTATIONS FOR MEDIAN AND Q3 -----------------
-        // Check if median and Q3 are both 10 (or very close to 10)
-        const isMedianAtMax = Math.abs(stats.median - 10) < 0.1;
-        const isQ3AtMax = Math.abs(stats.q3 - 10) < 0.1;
-        const areBothAtMax = isMedianAtMax && isQ3AtMax && Math.abs(medianY - q3Y) < 5;
-      
-        if (isMedianAtMax || isQ3AtMax) {
-          p.textAlign(p.LEFT, p.CENTER);
-          p.textSize(12);
-          p.fill("#1f2a44");
-          
-          if (areBothAtMax) {
-            // Both are at 10, show combined annotation
-            const annotationX = boxX2 + 15;
-            const annotationY = medianY;
-            p.stroke("#3b5bdb");
-            p.strokeWeight(1.5);
-            p.line(boxX2, medianY, annotationX - 5, annotationY);
-            p.noStroke();
-            p.fill("#ffffff");
-            p.rect(annotationX - 3, annotationY - 12, 110, 24, 4);
-            p.fill("#1f2a44");
-            p.text("Median & Q3 = 10", annotationX, annotationY);
-          } else {
-            // Annotation for Q3 = 10
-            if (isQ3AtMax) {
-              const annotationX = boxX2 + 15;
-              const annotationY = q3Y;
-              p.stroke("#3b5bdb");
-              p.strokeWeight(1.5);
-              p.line(boxX2, q3Y, annotationX - 5, annotationY);
-              p.noStroke();
-              p.fill("#ffffff");
-              p.rect(annotationX - 3, annotationY - 10, 70, 20, 4);
-              p.fill("#1f2a44");
-              p.text("Q3 = 10", annotationX, annotationY);
-            }
-            
-            // Annotation for Median = 10
-            if (isMedianAtMax) {
-              const annotationX = boxX2 + 15;
-              const annotationY = medianY;
-              p.stroke("#3b5bdb");
-              p.strokeWeight(1.5);
-              p.line(boxX2, medianY, annotationX - 5, annotationY);
-              p.noStroke();
-              p.fill("#ffffff");
-              p.rect(annotationX - 3, annotationY - 10, 85, 20, 4);
-              p.fill("#1f2a44");
-              p.text("Median = 10", annotationX, annotationY);
-            }
-          }
-        }
-      
-        // ----------------- STATS CALLOUT -----------------
-        const statX = p.width - margin.right + 10;
-        const statYStart = margin.top + 40;
-        const statSpacing = 22;
-      
-        const statLines = [
-          { label: "Max", value: stats.max },
-          { label: "Q3", value: stats.q3 },
-          { label: "Median", value: stats.median },
-          { label: "Q1", value: stats.q1 },
-          { label: "Min", value: stats.min }
+        // ----------------- INTEGRATED STAT MARKERS ON PLOT -----------------
+        // Add labels and tick marks directly on the boxplot for Min, Q1, Median, Q3, Max
+        const labelOffsetX = 40; // Distance from box/whiskers to labels
+        const tickLength = 18; // Length of tick marks
+        
+        // Separate Max (horizontal) from others (vertical stack)
+        const maxStat = { name: "Max", value: stats.max, y: maxY };
+        const verticalStats = [
+          { name: "Q3", value: stats.q3, y: q3Y },
+          { name: "Median", value: stats.median, y: medianY },
+          { name: "Q1", value: stats.q1, y: q1Y }
         ];
-      
+        const minStat = { name: "Min", value: stats.min, y: minY };
+        
         p.textAlign(p.LEFT, p.CENTER);
         p.textSize(13);
-      
-        statLines.forEach((entry, idx) => {
-          p.fill("#8da2d5");
-          p.text(entry.label, statX, statYStart + idx * statSpacing);
-      
+        
+        // Calculate text dimensions for background boxes
+        const labelPadding = 8;
+        const labelHeight = 28;
+        const verticalSpacing = 45; // Spacing between vertically stacked labels
+        
+        // Position for vertical stack
+        const stackStartX = boxX2 + tickLength + labelOffsetX;
+        
+        // Pre-calculate label positions
+        const labelPositions = [];
+        
+        // Handle Max - keep it horizontal at the upper line
+        const maxLabelText = `${maxStat.name} = ${maxStat.value.toFixed(1)}`;
+        const maxTextWidth = p.textWidth(maxLabelText);
+        const maxExtraOffset = 45; // Extra offset to move Max further right
+        const maxLabelX = boxCenterX + tickLength + labelOffsetX + maxExtraOffset;
+        const maxLabelY = maxY; // Keep Max horizontal with the upper whisker line
+        
+        labelPositions.push({
+          point: maxStat,
+          tickStartX: boxCenterX,
+          labelX: maxLabelX,
+          labelY: maxLabelY,
+          labelText: maxLabelText,
+          textWidth: maxTextWidth,
+          needsConnector: false // No connector needed, it's horizontal
+        });
+        
+        // Handle Q3, Median, Q1 - stack them vertically below Max
+        const stackStartY = maxY + verticalSpacing; // Start vertical stack below Max
+        
+        verticalStats.forEach((point, idx) => {
+          const labelText = `${point.name} = ${point.value.toFixed(1)}`;
+          const textWidth = p.textWidth(labelText);
+          
+          // Stack vertically from top to bottom
+          const labelY = stackStartY + idx * verticalSpacing;
+          
+          // Determine tick start position
+          const tickStartX = boxX2; // Q3, Median, Q1 are all on box
+          
+          labelPositions.push({
+            point: point,
+            tickStartX: tickStartX,
+            labelX: stackStartX,
+            labelY: labelY,
+            labelText: labelText,
+            textWidth: textWidth,
+            needsConnector: true // Always show connector since labels are stacked
+          });
+        });
+        
+        // Handle Min separately - keep it horizontal with the whisker line
+        const minLabelText = `${minStat.name} = ${minStat.value.toFixed(1)}`;
+        const minTextWidth = p.textWidth(minLabelText);
+        const minLabelX = boxCenterX + tickLength + labelOffsetX;
+        const minLabelY = minY; // Keep Min horizontally aligned with its whisker position
+        
+        labelPositions.push({
+          point: minStat,
+          tickStartX: boxCenterX,
+          labelX: minLabelX,
+          labelY: minLabelY,
+          labelText: minLabelText,
+          textWidth: minTextWidth,
+          needsConnector: false // No connector needed, it's at the whisker
+        });
+        
+        // Draw all markers
+        labelPositions.forEach((labelPos) => {
+          const point = labelPos.point;
+          
+          // Draw prominent tick mark extending from the boxplot
+          p.stroke("#54627a");
+          p.strokeWeight(2.5);
+          p.line(labelPos.tickStartX, point.y, labelPos.tickStartX + tickLength, point.y);
+          
+          // Add visible dot at the exact value position (only for Q1, Median, Q3; Min/Max already have dots)
+          if (point.name !== "Min" && point.name !== "Max") {
+            p.fill("#54627a");
+            p.noStroke();
+            p.circle(labelPos.tickStartX, point.y, 5);
+          }
+          
+          // Draw connecting line if label is offset - make it more visible
+          if (labelPos.needsConnector) {
+            p.stroke("#54627a");
+            p.strokeWeight(2);
+            p.line(labelPos.tickStartX + tickLength, point.y, labelPos.labelX - labelPadding, labelPos.labelY);
+            p.noStroke();
+          }
+          
+          // Draw background box for label to make it more prominent
+          p.fill("#f7f9fc"); // Match visualization background instead of white
+          p.stroke("#54627a");
+          p.strokeWeight(1.5);
+          p.rect(labelPos.labelX - labelPadding, labelPos.labelY - labelHeight/2, labelPos.textWidth + labelPadding * 2, labelHeight, 5);
+          
+          // Draw label with value on top of background
+          p.noStroke();
           p.fill("#1f2a44");
-          p.text(entry.value.toFixed(1), statX + 78, statYStart + idx * statSpacing);
+          p.text(labelPos.labelText, labelPos.labelX, labelPos.labelY);
         });
       
         // ----------------- NARRATIVE -----------------
         const annotation =
-          `Middle 50% of teens fall between ${stats.q1.toFixed(1)} and ${stats.q3.toFixed(1)}, ` +
+          `Middle 50% (IQR) of teens fall between ${stats.q1.toFixed(1)} and ${stats.q3.toFixed(1)}, ` +
           `with a median addiction score of ${stats.median.toFixed(1)} — suggesting consistently high engagement.`;
       
         p.fill("#4b5670");
