@@ -106,7 +106,7 @@
       const w = (manager && manager.canvasWidth) || (manager && manager.width) || 700;
       const h = (manager && manager.canvasHeight) || (manager && manager.height) || 520;
       p.resizeCanvas(w, h);
-      p.background("#f7f9fc");
+      p.background("#FAFAFA");
     },
   
     
@@ -374,7 +374,7 @@
           }
           
           // Draw background box for label to make it more prominent
-          p.fill("#f7f9fc"); // Match visualization background instead of white
+          p.fill("#FAFAFA"); // Match article background
           p.stroke("#54627a");
           p.strokeWeight(1.5);
           p.rect(labelPos.labelX - labelPadding, labelPos.labelY - labelHeight/2, labelPos.textWidth + labelPadding * 2, labelHeight, 5);

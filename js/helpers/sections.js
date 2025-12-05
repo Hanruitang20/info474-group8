@@ -106,6 +106,14 @@
                             }
                         } catch (e) { /* ignore and fall back to raw index */ }
 
+                        // Update visualization container background to match article background for all sections
+                        try {
+                            var visEl = document.querySelector(cfg.visSelector);
+                            if (visEl) {
+                                visEl.style.background = '#FAFAFA'; // Match article background for all sections
+                            }
+                        } catch (e) { /* ignore */ }
+
                         // update sketch state via returned API if available (use mappedIndex)
                         if (window.__sketchAPI && window.__sketchAPI.setState) {
                             window.__sketchAPI.setState({ activeIndex: mappedIndex });

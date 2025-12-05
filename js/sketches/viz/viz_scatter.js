@@ -7,7 +7,7 @@
             var canvasW = manager.canvasWidth || manager.width || 600;
             var canvasH = manager.canvasHeight || manager.height || 520;
             p.resizeCanvas(canvasW, canvasH);
-            p.background('#f7f9fc');
+            p.background('#FAFAFA');
 
             var padding = 60;
             var plotW = canvasW - padding * 2;

@@ -75,7 +75,7 @@
             p.resizeCanvas(canvasW, canvasH);
 
             p.push();
-            p.background("#f7f9fc"); // Consistent background color
+            p.background("#FAFAFA"); // Match article background
             
             // Set font to match article
             p.textFont("Times New Roman");

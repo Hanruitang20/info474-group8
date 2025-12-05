@@ -83,7 +83,7 @@ window.VizEmotions = (function () {
         }
 
         p.resizeCanvas(manager.canvasWidth || (manager.width || 600), manager.canvasHeight || (manager.height || 520));
-        p.background("#f7f9fc");
+        p.background("#FAFAFA");
         p.textFont("Times New Roman");
 
         if (!ready) {

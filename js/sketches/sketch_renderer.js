@@ -63,7 +63,7 @@
         var canvasW = manager.canvasWidth || manager.width || 640;
         var canvasH = manager.canvasHeight || manager.height || 480;
         p.resizeCanvas(canvasW, canvasH);
-        p.background("#f7f9fc");
+        p.background("#FAFAFA");
         
         var cx = canvasW / 2;
         var cy = canvasH / 2;
@@ -100,7 +100,8 @@
 
       // SECTION 1 — Display header image
       if (ai === 1) {
-        p.background(255);
+        // Use article background color to match the article itself (#FAFAFA)
+        p.background("#FAFAFA");
         if (this.sectionImage && this.sectionImage.width > 0) {
           // Calculate dimensions to fit canvas while maintaining aspect ratio
           var imgW = this.sectionImage.width;
@@ -108,10 +109,10 @@
           var canvasW = manager.canvasWidth || manager.width || 640;
           var canvasH = manager.canvasHeight || manager.height || 480;
           
-          // Calculate scaling to fit within canvas with some padding
+          // Remove padding so image fills canvas - blend seamlessly with background
           var scale = Math.min(
-            (canvasW - 40) / imgW,
-            (canvasH - 40) / imgH
+            canvasW / imgW,
+            canvasH / imgH
           );
           
           var displayW = imgW * scale;
@@ -188,7 +189,8 @@
 
       // SECTION 9 — Display picture2.png
       if (ai === 9) {
-        p.background(255);
+        // Use article background color to match the article itself (#FAFAFA)
+        p.background("#FAFAFA");
         if (this.sectionImage9 && this.sectionImage9.width > 0) {
           // Calculate dimensions to fit canvas while maintaining aspect ratio
           var imgW = this.sectionImage9.width;
@@ -196,10 +198,10 @@
           var canvasW = manager.canvasWidth || manager.width || 640;
           var canvasH = manager.canvasHeight || manager.height || 480;
           
-          // Calculate scaling to fit within canvas with some padding
+          // Remove padding so image fills canvas - blend seamlessly with background
           var scale = Math.min(
-            (canvasW - 40) / imgW,
-            (canvasH - 40) / imgH
+            canvasW / imgW,
+            canvasH / imgH
           );
           
           var displayW = imgW * scale;

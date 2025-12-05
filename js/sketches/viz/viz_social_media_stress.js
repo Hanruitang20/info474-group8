@@ -130,7 +130,7 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         const w = p.width;
         const h = p.height;
 
-        p.background(245);
+        p.background("#FAFAFA");
 
         // Set font to match article
         p.textFont("Times New Roman");

@@ -9,7 +9,7 @@
             var cy = canvasH / 2;
 
             p.push();
-            p.background('#f7f9fc');
+            p.background('#FAFAFA');
 
             // Ambient gradient circle
             p.noStroke();

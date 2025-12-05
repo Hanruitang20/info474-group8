@@ -72,15 +72,15 @@ section[data-active-index="0"] .title {
   top: 60px;
   z-index: 100;
   margin-left: 40px;
-  background: #f7f9fc; /* Consistent light blue/grey background */
+  background: #FAFAFA; /* Match article background */
 }
 
 /* Remove any default canvas borders and ensure consistent styling */
+/* Background is set by individual visualizations, not here */
 #vis canvas {
   border: none !important;
   outline: none !important;
   display: block;
-  background: #f7f9fc;
 }
 
 /* 由 VisualController 控制显隐的 class */

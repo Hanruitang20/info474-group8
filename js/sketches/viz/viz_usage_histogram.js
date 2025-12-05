@@ -36,7 +36,7 @@
     draw: function (p, manager, ai, progress) {
       if (ai !== 3) return;
 
-      p.background(255);
+      p.background("#FAFAFA");
       p.push();
       p.translate(manager.margin.left, manager.margin.top);
       

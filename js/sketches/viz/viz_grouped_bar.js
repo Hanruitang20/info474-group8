@@ -166,7 +166,7 @@ window.VizGroupedBar = {
     // Increase canvas height to accommodate buttons below the chart
     const canvasH = (manager && manager.canvasHeight) || (manager && manager.height) || 600;
     p.resizeCanvas(canvasW, canvasH);
-    p.background("#f7f9fc");
+    p.background("#FAFAFA");
     
     // Set font to match article
     p.textFont("Times New Roman");
