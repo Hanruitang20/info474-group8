@@ -96,10 +96,10 @@
       p.textAlign(p.CENTER, p.TOP);
       p.text("Daily Social Media Usage vs. Mental Health Scores (Higher Score = Less Distress)", manager.width / 2, 10);
 
-      // Chart area - increased spacing from title
-      const chartX = 60;
+      // Chart area - increased spacing from title and left margin for longer Y-axis label
+      const chartX = 80;
       const chartY = 55;
-      const chartW = manager.width - 100;
+      const chartW = manager.width - 120;
       const chartH = manager.height - 125;
 
       // Data ranges
@@ -203,20 +203,11 @@
       p.text("Daily Social Media Usage (hrs/day)", chartX + chartW / 2, chartY + chartH + 28);
 
       p.push();
-      p.translate(chartX - 35, chartY + chartH / 2);
+      p.translate(chartX - 45, chartY + chartH / 2);
       p.rotate(-p.HALF_PI);
       p.textAlign(p.CENTER, p.CENTER);
-      p.text("Mental Health Score", 0, 0);
+      p.text("Mental Health Score (Higher = better emotional well-being, less distress)", 0, 0);
       p.pop();
-
-      // Mental Health scale explanation - spaced properly
-      p.fill(90);
-      p.textSize(11);
-      p.textAlign(p.CENTER, p.TOP);
-      p.text("Mental Health Score Scale: Higher scores = better emotional well-being (less distress)",
-        chartX + chartW / 2,
-        chartY + chartH + 50
-    );
 
       // Hover tooltip
       if (this.hoverPoint) {

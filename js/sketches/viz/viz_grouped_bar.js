@@ -191,7 +191,7 @@ window.VizGroupedBar = {
     const currentInd = this.INDICATORS.find(ind => ind.key === this.selectedIndicator);
     const indicatorLabel = currentInd ? currentInd.label : "Emotional Difficulty";
 
-    const margin = { top: 90, right: 60, bottom: 140, left: 100 }; // Increased bottom margin for buttons
+    const margin = { top: 90, right: 60, bottom: 140, left: 130 }; // Increased left margin for longer Y-axis label with indicator name
     const plotW = canvasW - margin.left - margin.right;
     const plotH = canvasH - margin.top - margin.bottom;
     const plotX = margin.left;
@@ -208,8 +208,8 @@ window.VizGroupedBar = {
     const barWidth = (groupWidth * 0.7) / genders.length;
     const barGap = (groupWidth * 0.3) / (genders.length + 1);
 
-    // Fixed y-axis range: 0-5
-    const minVal = 0;
+    // Fixed y-axis range: 1-5
+    const minVal = 1;
     const maxVal = 5;
 
     const yFor = val => plotY + plotH - ((val - minVal) / (maxVal - minVal)) * plotH;
@@ -220,9 +220,7 @@ window.VizGroupedBar = {
     p.textSize(22);
     p.text("Emotional Difficulty by Age and Gender", canvasW / 2, margin.top - 50);
 
-    p.fill("#54627a");
-    p.textSize(13);
-    p.text(`Average '${indicatorLabel}' score (1 = least, 5 = most)`, canvasW / 2, margin.top - 28);
+    // Subtitle removed - scale explanation moved to Y-axis label
 
     // Y-axis
     p.stroke("#bcc6dd");
@@ -230,8 +228,8 @@ window.VizGroupedBar = {
     p.line(plotX, plotY, plotX, plotY + plotH);
     p.line(plotX, plotY + plotH, plotX + plotW, plotY + plotH);
 
-    // Y-axis ticks and labels (0-5)
-    for (let i = 0; i <= 5; i++) {
+    // Y-axis ticks and labels (1-5)
+    for (let i = 1; i <= 5; i++) {
       const val = i;
       const y = yFor(val);
       p.stroke("#96a2c2");
@@ -244,14 +242,14 @@ window.VizGroupedBar = {
       p.text(val.toFixed(0), plotX - 12, y);
     }
 
-    // Y-axis label
+    // Y-axis label with selected indicator and scale explanation
     p.push();
-    p.translate(plotX - 70, plotY + plotH / 2);
+    p.translate(plotX - 90, plotY + plotH / 2);
     p.rotate(-p.HALF_PI);
     p.fill("#54627a");
     p.textSize(12);
     p.textAlign(p.CENTER, p.CENTER);
-    p.text("Average Emotional Difficulty Score", 0, 0);
+    p.text(`Average '${indicatorLabel}' Score (1 = least, 5 = most)`, 0, 0);
     p.pop();
 
     // Draw bars
