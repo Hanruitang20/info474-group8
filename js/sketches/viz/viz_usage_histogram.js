@@ -187,8 +187,31 @@
         const h = this.hoverBin;
         const tooltipX = p.mouseX + 15;
         const tooltipY = p.mouseY - 50;
-        const boxW = 180;
-        const boxH = 65;
+        
+        // Calculate percentage
+        const totalStudents = usages.length;
+        const percentage = ((h.count / totalStudents) * 100).toFixed(1);
+        
+        // Prepare tooltip text lines
+        p.textSize(12);
+        p.textAlign(p.LEFT, p.TOP);
+        const rangeText = h.index === binCount - 1
+          ? `${h.range.min}+ hrs`
+          : `${h.range.min}-${h.range.max} hrs`;
+        const line1 = `Range: ${rangeText}`;
+        const line2 = `Student count: ${h.count}`;
+        const line3 = `Percentage: ${percentage}%`;
+        
+        // Measure text widths to determine box size
+        const padding = 20; // Horizontal padding (10 on each side)
+        const lineHeight = 20; // Vertical spacing between lines
+        const verticalPadding = 24; // Vertical padding (12 on top and bottom)
+        const textWidth1 = p.textWidth(line1);
+        const textWidth2 = p.textWidth(line2);
+        const textWidth3 = p.textWidth(line3);
+        const maxTextWidth = Math.max(textWidth1, textWidth2, textWidth3);
+        const boxW = maxTextWidth + padding;
+        const boxH = (lineHeight * 3) + verticalPadding;
 
         // Shadow
         p.fill(0, 15);
@@ -206,11 +229,9 @@
         p.fill(34);
         p.textSize(12);
         p.textAlign(p.LEFT, p.TOP);
-        const rangeText = h.index === binCount - 1
-          ? `${h.range.min}+ hrs`
-          : `${h.range.min}-${h.range.max} hrs`;
-        p.text(`Range: ${rangeText}`, tooltipX + 10, tooltipY + 12);
-        p.text(`Count: ${h.count} students`, tooltipX + 10, tooltipY + 32);
+        p.text(line1, tooltipX + 10, tooltipY + 12);
+        p.text(line2, tooltipX + 10, tooltipY + 12 + lineHeight);
+        p.text(line3, tooltipX + 10, tooltipY + 12 + lineHeight * 2);
       }
 
       p.pop();
