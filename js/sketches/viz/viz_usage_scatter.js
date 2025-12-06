@@ -33,6 +33,9 @@
           };
         }).filter(d => d.usage !== null && d.mh !== null && d.usage >= 0 && d.mh >= 0);
 
+        // Store participant count (number of valid usage + mental health score pairs)
+        this.participantCount = this.data.length;
+
         // Calculate linear regression
         if (this.data.length > 0) {
           const xs = this.data.map(d => d.usage);
@@ -252,6 +255,17 @@
       }
 
       p.pop();
+
+      // Dataset size label - top right corner (outside translated coordinate system)
+      if (this.participantCount !== undefined) {
+        p.fill(85);
+        p.textSize(9);
+        p.textFont("Times New Roman");
+        p.textAlign(p.RIGHT, p.TOP);
+        const participantText = `Dataset Size: ${this.participantCount.toLocaleString()} participants`;
+        const canvasW = (manager && manager.canvasWidth) || (manager && manager.width) || p.width;
+        p.text(participantText, canvasW - 20, manager.margin.top + 10);
+      }
     }
   };
 })();

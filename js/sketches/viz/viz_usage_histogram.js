@@ -25,6 +25,9 @@
           return isNaN(val) ? null : val;
         }).filter(v => v !== null && v >= 0);
 
+        // Store participant count (number of valid usage entries)
+        this.participantCount = this.data.length;
+
         return this.data;
       } catch (err) {
         console.error("❌ Error loading histogram data:", err);
@@ -235,6 +238,17 @@
       }
 
       p.pop();
+
+      // Dataset size label - top right corner (outside translated coordinate system)
+      if (this.participantCount !== undefined) {
+        p.fill(85);
+        p.textSize(9);
+        p.textFont("Times New Roman");
+        p.textAlign(p.RIGHT, p.TOP);
+        const participantText = `Dataset Size: ${this.participantCount.toLocaleString()} participants`;
+        const canvasW = (manager && manager.canvasWidth) || (manager && manager.width) || p.width;
+        p.text(participantText, canvasW - 20, manager.margin.top + 10);
+      }
     }
   };
 })();

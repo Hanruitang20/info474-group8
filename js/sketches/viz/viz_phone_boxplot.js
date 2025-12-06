@@ -53,6 +53,9 @@
   
         this.stats = this.computeStats(this.values);
         
+        // Store participant count for display
+        this.participantCount = this.values.length;
+        
         // Extract sample info
         if (ages.length > 0) {
           const sortedAges = ages.sort((a, b) => a - b);
