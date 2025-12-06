@@ -94,7 +94,7 @@
       p.textSize(15);
       p.textStyle(p.NORMAL);
       p.textAlign(p.CENTER, p.TOP);
-      p.text("Daily Social Media Usage vs. Mental Health Scores (Higher Score = Less Distress)", manager.width / 2, 10);
+      p.text("How Daily Social Media Use Relates to Mental Health Scores?", manager.width / 2, 10);
 
       // Chart area - increased spacing from title and left margin for longer Y-axis label
       const chartX = 80;
@@ -109,16 +109,6 @@
       const xMax = Math.max(...xs) * 1.05;
       const yMin = 0;
       const yMax = Math.max(...ys) * 1.1;
-
-      // Draw gridlines
-      p.stroke(230);
-      p.strokeWeight(1);
-      for (let i = 0; i <= 5; i++) {
-        const x = chartX + (chartW / 5) * i;
-        const y = chartY + (chartH / 5) * i;
-        p.line(x, chartY, x, chartY + chartH);
-        p.line(chartX, y, chartX + chartW, y);
-      }
 
       // Draw trend line
       if (this.regression) {
@@ -184,8 +174,27 @@
         p.text(value.toFixed(1), x, chartY + chartH + 10);
       }
 
-      // Y-axis ticks and labels - integers only, with proper spacing
+      // Y-axis ticks and labels - integers only, with proper spacing and emotional well-being meanings
+      // Mapping function for emotional well-being meanings
+      const getWellBeingLabel = (val) => {
+        const rounded = Math.round(val);
+        if (rounded === 10) return "excellent well-being";
+        if (rounded === 8) return "good well-being";
+        if (rounded === 6) return "moderate strain";
+        if (rounded === 4) return "high strain";
+        if (rounded === 2) return "severe distress";
+        if (rounded === 0) return "extreme distress";
+        // For values in between, use closest mapping
+        if (rounded >= 9) return "excellent well-being";
+        if (rounded >= 7) return "good well-being";
+        if (rounded >= 5) return "moderate strain";
+        if (rounded >= 3) return "high strain";
+        if (rounded >= 1) return "severe distress";
+        return "extreme distress";
+      };
+
       p.textAlign(p.RIGHT, p.CENTER);
+      p.textSize(9); // Slightly smaller font to fit longer labels
       for (let i = 0; i <= 5; i++) {
         const y = chartY + (chartH / 5) * (5 - i);
         const value = Math.round((yMax / 5) * i);
@@ -193,7 +202,8 @@
         p.strokeWeight(1);
         p.line(chartX - 3, y, chartX + 3, y);
         p.noStroke();
-        p.text(value.toString(), chartX - 12, y);
+        const labelText = `${value} (${getWellBeingLabel(value)})`;
+        p.text(labelText, chartX - 15, y);
       }
 
       // Axis labels
@@ -203,10 +213,10 @@
       p.text("Daily Social Media Usage (hrs/day)", chartX + chartW / 2, chartY + chartH + 28);
 
       p.push();
-      p.translate(chartX - 45, chartY + chartH / 2);
+      p.translate(chartX - 100, chartY + chartH / 2);
       p.rotate(-p.HALF_PI);
       p.textAlign(p.CENTER, p.CENTER);
-      p.text("Mental Health Score (Higher = better emotional well-being, less distress)", 0, 0);
+      p.text("Mental Health Score", 0, 0);
       p.pop();
 
       // Hover tooltip
