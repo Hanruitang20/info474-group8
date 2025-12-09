@@ -234,10 +234,35 @@ window.VizEmotions = (function () {
         p.fill(emotionColors[dominantEmotion]);
         p.rect(cardX + imgPadding, imgY, imgW, imgH, 12);
 
+        // Emoji
         p.textSize(90);
         p.textAlign(p.CENTER, p.CENTER);
         p.fill(255);
         p.text(emotionEmojis[dominantEmotion], cardX + cardW / 2, imgY + imgH / 2);
+
+        // ---- Emotion label under emoji with semi-transparent background ----
+        const labelText = dominantEmotion;
+        p.textSize(18);
+        p.textAlign(p.CENTER, p.CENTER);
+
+        const paddingX = 10;
+        const paddingY = 4;
+        const textWidth = p.textWidth(labelText);
+        const textHeight = 18;
+        const labelY = imgY + imgH / 2 + 50; // slightly below emoji center
+
+        p.fill(255, 180); // semi-transparent white
+        p.noStroke();
+        p.rect(
+            cardX + cardW / 2 - textWidth / 2 - paddingX,
+            labelY - textHeight / 2 - paddingY,
+            textWidth + paddingX * 2,
+            textHeight + paddingY * 2,
+            5
+        );
+
+        p.fill(0);
+        p.text(labelText, cardX + cardW / 2, labelY);
 
         // Metrics panel
         const panelY = imgY + imgH + 20;
