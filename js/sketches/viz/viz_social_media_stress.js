@@ -36,6 +36,23 @@ console.log("=== viz_social_media_stress.js LOADED ===");
     let dataLoaded = false;
     let lastMousePressed = false;
 
+    // ---- PINK & BLUE COLOR PALETTE ----
+    const platformColors = {
+        normal: "#87CEFA", // light blue
+        hover: "#FFC0CB",  // light pink
+        selected: "#FF69B4" // hot pink
+    };
+
+    const tabColors = {
+        normal: "#ADD8E6",
+        active: "#FFB6C1"
+    };
+
+    const barColors = {
+        base: "#87CEFA",
+        highlight: "#FF69B4"
+    };
+
     function calculateAverages(data, platformIndex) {
         averages = [];
         let selectedPlatform = platforms[platformIndex];
@@ -65,7 +82,7 @@ console.log("=== viz_social_media_stress.js LOADED ===");
 
     function drawPlatformButtons(p, w) {
         // Draw platform selection buttons
-        p.fill(80);
+        p.fill(0);
         p.textSize(14);
         p.textAlign(p.LEFT, p.CENTER);
         p.text('Select Platform:', 20, 125);
@@ -79,19 +96,18 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         for (let i = 0; i < platforms.length; i++) {
             let x = buttonX + i * (buttonWidth + buttonSpacing);
 
-            // Check if mouse is over button
             let isHover = p.mouseX > x && p.mouseX < x + buttonWidth &&
                 p.mouseY > buttonY && p.mouseY < buttonY + buttonHeight;
 
-            // Button background
+            // Platform button colors
             if (i === currentPlatform) {
-                p.fill(50, 120, 200); // Selected color
+                p.fill(platformColors.selected);
                 p.noStroke();
             } else if (isHover) {
-                p.fill(200, 220, 240); // Hover color
+                p.fill(platformColors.hover);
                 p.noStroke();
             } else {
-                p.fill(255); // Normal color
+                p.fill(platformColors.normal);
                 p.stroke(150);
                 p.strokeWeight(1);
             }
@@ -131,11 +147,8 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         const h = p.height;
 
         p.background("#FAFAFA");
-
-        // Set font to match article
         p.textFont("Times New Roman");
 
-        // Show loading message if data not ready
         if (!dataLoaded || !rawData) {
             p.fill(100);
             p.textSize(18);
@@ -155,34 +168,28 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         p.textAlign(p.CENTER, p.CENTER);
         p.text(`Social Media Stress: ${platforms[currentPlatform]}`, w / 2, 60);
 
-        // Draw platform selection buttons
         drawPlatformButtons(p, w);
 
-        // Draw tab indicators
+        // Draw tab indicators with pink/blue colors
         p.textSize(14);
         let tabY = 175;
         let tabSpacing = w / categories.length;
         categories.forEach((cat, i) => {
             let x = (i + 0.5) * tabSpacing;
             if (i === activeTab) {
-                p.fill(50, 120, 200);
+                p.fill(tabColors.active);
                 p.noStroke();
                 p.rect(x - 80, tabY - 15, 160, 30, 5);
                 p.fill(255);
             } else {
-                p.fill(150);
+                p.fill(tabColors.normal);
             }
             p.text(cat.name, x, tabY);
         });
 
-        // Active tab based on which section (81, 82, or 83)
-        if (activeIndex === 81) {
-            activeTab = 0; // Usage & Behavior
-        } else if (activeIndex === 82) {
-            activeTab = 1; // Emotional / Mental Stress
-        } else if (activeIndex === 83) {
-            activeTab = 2; // Physical / Sleep Effects
-        }
+        if (activeIndex === 81) activeTab = 0;
+        else if (activeIndex === 82) activeTab = 1;
+        else if (activeIndex === 83) activeTab = 2;
 
         calculateAverages(rawData, currentPlatform);
 
@@ -194,35 +201,21 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         let catAvgs = averages[activeTab];
         let globalMax = 8;
 
-        // Calculate starting X to center the tubes
         let totalWidth = cat.factors.length * tubeWidth + (cat.factors.length - 1) * spacing;
         let startX = (w - totalWidth) / 2;
 
         for (let i = 0; i < cat.factors.length; i++) {
             let val = catAvgs[i];
-            let scaleFactor = (activeTab === 0 && i < 3) ? 1 : 8 / 5;
-            let targetH = p.map(val * scaleFactor, 0, globalMax, 0, maxHeight);
+            let targetH = p.map(val, 0, globalMax, 0, maxHeight);
 
-            // Animate height smoothly
-            let hh = targetH;
+            let x = startX + i * (tubeWidth + spacing);
+            let y = baseY - targetH;
 
-            // Color gradient
-            let cCol = p.color(
-                p.map(val * scaleFactor, 0, globalMax, 0, 255),
-                p.map(val * scaleFactor, 0, globalMax, 200, 50),
-                0
-            );
-
-            // Pulsing glow for highest in tab
-            if (val === Math.max(...catAvgs)) {
-                cCol = p.lerpColor(cCol, p.color(255, 0, 0), 0.4 + 0.1 * p.sin(p.frameCount * 0.1));
-            }
-
+            // Bar color
+            let cCol = (val === Math.max(...catAvgs)) ? barColors.highlight : barColors.base;
             p.fill(cCol);
             p.noStroke();
-            let x = startX + i * (tubeWidth + spacing);
-            let y = baseY - hh;
-            p.rect(x, y, tubeWidth, hh, 5);
+            p.rect(x, y, tubeWidth, targetH, 5);
 
             // Outline
             p.noFill();
@@ -238,7 +231,7 @@ console.log("=== viz_social_media_stress.js LOADED ===");
             p.text(cat.factors[i].label, x + tubeWidth / 2, baseY + 20);
 
             // Value
-            if (hh > 10) {
+            if (targetH > 10) {
                 p.textSize(14);
                 p.text(val.toFixed(1), x + tubeWidth / 2, y - 10);
             }
@@ -251,22 +244,16 @@ console.log("=== viz_social_media_stress.js LOADED ===");
         p.text('Click platform buttons above to switch • Different sections show different categories', w / 2, h - 20);
     }
 
-    // Expose the visualization
     window.StressDashboardViz = {
-
         setData: function (manager, data) {
-            // If data is a file path/URL string, load it
             if (typeof data === 'string' && data.includes('cleanedEmotional.csv')) {
-                // Load the CSV file using p5's loadTable
                 if (window.p5Instance) {
                     window.p5Instance.loadTable('data/cleanedEmotional.csv', 'csv', 'header', (table) => {
                         rawData = [];
                         for (let i = 0; i < table.getRowCount(); i++) {
                             let row = {};
                             let columns = table.columns;
-                            columns.forEach(col => {
-                                row[col] = table.get(i, col);
-                            });
+                            columns.forEach(col => { row[col] = table.get(i, col); });
                             rawData.push(row);
                         }
                         dataLoaded = true;
@@ -276,15 +263,12 @@ console.log("=== viz_social_media_stress.js LOADED ===");
                 return;
             }
 
-            // Convert table data to array of objects if needed
             if (data && data.getRowCount) {
                 rawData = [];
                 for (let i = 0; i < data.getRowCount(); i++) {
                     let row = {};
                     let columns = data.columns;
-                    columns.forEach(col => {
-                        row[col] = data.get(i, col);
-                    });
+                    columns.forEach(col => { row[col] = data.get(i, col); });
                     rawData.push(row);
                 }
                 dataLoaded = true;
@@ -293,21 +277,12 @@ console.log("=== viz_social_media_stress.js LOADED ===");
                 dataLoaded = true;
             }
 
-            // Initial calculation
-            if (rawData) {
-                calculateAverages(rawData, 0);
-            }
+            if (rawData) calculateAverages(rawData, 0);
         },
 
         draw: function (p, manager, activeIndex, progress) {
-            if (!window.p5Instance) {
-                window.p5Instance = p;
-            }
-
-            if (!dataLoaded && !rawData) {
-                this.setData(manager, 'data/cleanedEmotional.csv');
-            }
-
+            if (!window.p5Instance) window.p5Instance = p;
+            if (!dataLoaded && !rawData) this.setData(manager, 'data/cleanedEmotional.csv');
             drawVisualization(p, manager, activeIndex, progress);
         }
     };
